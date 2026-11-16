@@ -83,22 +83,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    * who never open the sign-in form never download it.
    */
   const connect = useCallback(() => {
-    connection.current ??= getClient().then((client) => {
-      client.auth.onAuthStateChange((event, session) => {
-        // Keep this callback synchronous: Supabase warns against awaiting its own calls here.
-        if (event === 'PASSWORD_RECOVERY') setRecovering(true)
-        const u = session?.user
-        setUser((prev) => (u ? (prev?.id === u.id && prev.email === u.email ? prev : { id: u.id, email: u.email ?? '' }) : null))
-        setStatus(u ? 'signedIn' : 'signedOut')
-        // Tidy the one-time email-link code out of the address bar.
-        if (hasEmailLinkCode()) {
-          const url = new URL(window.location.href)
-          url.searchParams.delete('code')
-          window.history.replaceState(window.history.state, '', url.toString())
-        }
-      })
-      return client
-    })
+    connection.current ??= getClient().then(
+      (client) =>
+        // Hand the client out only after Supabase has reported the session it
+        // started with. Otherwise a sign-in made straight away can race that
+        // first report, and its late "no session" would undo the sign-in.
+        new Promise<SupabaseClient>((resolve) => {
+          const ready = () => resolve(client)
+          window.setTimeout(ready, 5000) // never leave sign-in hanging
+          client.auth.onAuthStateChange((event, session) => {
+            // Keep this callback synchronous: Supabase warns against awaiting its own calls here.
+            if (event === 'PASSWORD_RECOVERY') setRecovering(true)
+            const u = session?.user
+            setUser((prev) => (u ? (prev?.id === u.id && prev.email === u.email ? prev : { id: u.id, email: u.email ?? '' }) : null))
+            setStatus(u ? 'signedIn' : 'signedOut')
+            // Tidy the one-time email-link code out of the address bar.
+            if (hasEmailLinkCode()) {
+              const url = new URL(window.location.href)
+              url.searchParams.delete('code')
+              window.history.replaceState(window.history.state, '', url.toString())
+            }
+            if (event === 'INITIAL_SESSION') ready()
+          })
+        }),
+    )
     return connection.current
   }, [])
 
