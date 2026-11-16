@@ -38,6 +38,11 @@ Brand guide, logos and icons: [`branding/BRAND.md`](branding/BRAND.md).
 - **Glossary**: 53 terms with examples and cross-linked related terms. Search covers names, aliases ("UTG", "OESD") and definitions, and lessons link straight to each entry.
 - **Hand rankings**: all ten hands with real card examples, tie-break rules and how often each occurs.
 - **Odds calculator**: pick hands for 2–6 players and any board. It gives exact win/split odds by checking every possible remaining board (heads-up preflop is all 1,712,304), names each player's current hand, and explains the winner at showdown. It runs in a Web Worker so the page stays responsive.
+- **Accounts and cloud sync** (optional): sign up with email and password to back up your sessions and learning progress and use them on several devices.
+  - Works offline: changes save on the device first and upload when you're back online, with a status line showing what's waiting.
+  - Edits from two devices are merged: the later edit of a session wins, and deletes sync too.
+  - Data saved before signing in is added to the account only when you choose.
+  - Sign out removes the account's data from the device; delete account removes it everywhere.
 - **Demo mode**: fictional, clearly labeled data, stored separately from your real records.
 - **Settings**: currency, dark and light themes, CSV export, and delete all.
 - Responsive layout: bottom navigation on phones and a sidebar on desktop.
@@ -63,7 +68,10 @@ Brand guide, logos and icons: [`branding/BRAND.md`](branding/BRAND.md).
   Odds are never hard-coded or sampled.
 - **Calculation logic is pure and separate from the UI.** `src/domain/analytics.ts` has no React or storage code, so every number on screen is unit-tested.
 - **One source for the brand.** The logo, icons and social card are generated from a single definition of the mark and palette (`branding/tools`), so every asset matches.
-- **Storage sits behind an interface.** `SessionRepository` is implemented with `localStorage` today. A cloud version (for example Supabase with row-level security, for accounts and multi-device sync) can replace it without touching any screen.
+- **Storage sits behind an interface.** `SessionRepository` has a device-only version for guests and a synced version for accounts, and no screen knows which one it's using.
+- **Offline-first sync with last-writer-wins.** Signed-in data is saved on the device first, with a list of changes still to upload. Deletes are kept as tombstones so other devices learn about them. The database refuses to let an older edit overwrite a newer one, so it doesn't matter which device uploads first. Learning progress merges per item (the latest change per lesson, every quiz attempt, the first answer to each daily puzzle), and the tests check the merge gives the same result in either order.
+- **Security lives in the database.** Every table uses Postgres row-level security, so the browser's public key can only reach the signed-in user's own rows. The schema is in [`supabase/migrations`](supabase/migrations).
+- **Guests download nothing extra.** The Supabase client is loaded only when someone signs in.
 - **Stored data is validated when it's read back**, so a corrupt record is skipped instead of crashing the app.
 - **CSV export guards against formula injection** in spreadsheet apps.
 
@@ -79,7 +87,9 @@ src/
   quiz/         question bank, engine-based question generators, quiz building and stats
   achievements/ achievement definitions computed from learning progress
   recap/        Year in Review stats, privacy-aware summary lines, canvas card export
-  data/         storage interface, localStorage implementation, demo data
+  data/         storage interface, device and synced implementations, demo data
+  sync/         session sync and progress merging: pure, unit-tested
+  cloud/        Supabase client and table access
   state/        React providers: settings, sessions, toast, add/edit form
   components/   UI building blocks, charts, heatmap, calendar, app shell
   pages/        Home, Sessions, Profile, and the upcoming feature pages
@@ -95,6 +105,15 @@ npm run dev
 ```
 
 Then open http://localhost:5173.
+
+### Accounts (optional)
+
+The app runs fine without a backend: everything stays on the device. To switch on accounts and sync:
+
+1. Create a free project at [supabase.com](https://supabase.com).
+2. In its SQL editor, run [`supabase/migrations/20261116000000_accounts_and_sync.sql`](supabase/migrations/20261116000000_accounts_and_sync.sql).
+3. Copy `.env.example` to `.env.local` and fill in the project URL and publishable key (Project Settings → API).
+4. Under Authentication → URL Configuration, add your site's address (for example `http://localhost:5173/`) to the redirect URLs, so confirmation and password-reset links come back to the app.
 
 | Command | What it does |
 | --- | --- |
@@ -114,4 +133,4 @@ Then open http://localhost:5173.
 - [x] Phase 7: Knowledge quizzes and achievements
 - [x] Phase 8: Year in Review
 - [x] Phase 9: Final branding: Riverline name, Breakout Spade logo, icons, splash
-- [ ] Phase 10: ~~Deployment (GitHub Pages)~~ ✓, accounts and cloud sync, polish
+- [ ] Phase 10: ~~Deployment (GitHub Pages)~~ ✓, ~~accounts and cloud sync~~ ✓, polish

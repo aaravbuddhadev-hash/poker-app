@@ -1,78 +1,33 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { computeAchievements, type AchievementStatus } from '../achievements/achievements'
+import {
+  GUEST_KEYS,
+  loadPuzzles,
+  loadQuizzes,
+  loadSeen,
+  PROGRESS_RELOAD_EVENT,
+  write,
+  writeLocalChange,
+  type QuizData,
+} from '../data/progressStorage'
 import { getBrowserStore } from '../data/sessionRepository'
 import { LESSONS } from '../learn/lessons'
-import { isIsoDate } from '../lib/dates'
 import { puzzleStats, type Submission } from '../puzzle/scoring'
 import { utcDateKey } from '../puzzle/daily'
 import { quizStats, type QuizAttempt, type QuizStats } from '../quiz/stats'
 import type { Question } from '../quiz/types'
+import { useStorageKeys } from './AuthProvider'
 import { useLearning } from './LearningProvider'
 import { useToast } from './ToastProvider'
 
 /**
- * Shared, device-saved progress for puzzles and quizzes, so every screen (and
- * the achievements) sees the same data the moment it changes.
- *
- * Storage shapes:
- *   river.v1.puzzles      { submissions: { "2026-11-15": Submission } }
- *   river.v1.quizzes      { attempts: QuizAttempt[], missed: Question[] }
- *   river.v1.achievements { seen: string[] }  (ids already announced)
+ * Shared progress for puzzles and quizzes, so every screen (and the
+ * achievements) sees the same data the moment it changes. Saved on this
+ * device under the current account's keys (see src/data/progressStorage.ts)
+ * and synced by ProgressSync when signed in.
  */
-export const PUZZLES_KEY = 'river.v1.puzzles'
-export const QUIZZES_KEY = 'river.v1.quizzes'
-export const ACHIEVEMENTS_KEY = 'river.v1.achievements'
+export const PUZZLES_KEY = GUEST_KEYS.puzzles
 const MAX_MISSED = 50
-
-function read<T>(key: string, fallback: T): T {
-  try {
-    const raw = getBrowserStore().getItem(key)
-    return raw ? (JSON.parse(raw) as T) : fallback
-  } catch {
-    return fallback
-  }
-}
-function write(key: string, value: unknown) {
-  try {
-    getBrowserStore().setItem(key, JSON.stringify(value))
-  } catch {
-    // Storage blocked: progress still works for this visit.
-  }
-}
-
-function isSubmission(v: unknown): v is Submission {
-  if (typeof v !== 'object' || v === null) return false
-  const s = v as Record<string, unknown>
-  const nums = (x: unknown) => Array.isArray(x) && x.every((n) => typeof n === 'number' && Number.isFinite(n))
-  return (
-    (s.kind === 'preflop' || s.kind === 'flop' || s.kind === 'turn') &&
-    typeof s.players === 'number' &&
-    nums(s.prediction) &&
-    nums(s.equity) &&
-    nums(s.win) &&
-    nums(s.tie) &&
-    typeof s.accuracy === 'number' &&
-    typeof s.submittedAt === 'string'
-  )
-}
-
-function loadPuzzles(): Record<string, Submission> {
-  const parsed = read<{ submissions?: Record<string, unknown> }>(PUZZLES_KEY, {})
-  const out: Record<string, Submission> = {}
-  for (const [date, s] of Object.entries(parsed.submissions ?? {})) if (isIsoDate(date) && isSubmission(s)) out[date] = s
-  return out
-}
-
-function loadQuizzes(): { attempts: QuizAttempt[]; missed: Question[] } {
-  const parsed = read<{ attempts?: unknown; missed?: unknown }>(QUIZZES_KEY, {})
-  const attempts = Array.isArray(parsed.attempts)
-    ? parsed.attempts.filter((a): a is QuizAttempt => typeof a === 'object' && a !== null && Array.isArray((a as QuizAttempt).results))
-    : []
-  const missed = Array.isArray(parsed.missed)
-    ? parsed.missed.filter((q): q is Question => typeof q === 'object' && q !== null && typeof (q as Question).id === 'string' && typeof (q as Question).type === 'string')
-    : []
-  return { attempts, missed }
-}
 
 interface ProgressValue {
   submissions: Record<string, Submission>
@@ -88,30 +43,47 @@ interface ProgressValue {
 const ProgressContext = createContext<ProgressValue | null>(null)
 
 export function ProgressProvider({ children }: { children: ReactNode }) {
-  const [submissions, setSubmissions] = useState(loadPuzzles)
-  const [quizData, setQuizData] = useState(loadQuizzes)
+  const keys = useStorageKeys()
+  const [submissions, setSubmissions] = useState(() => loadPuzzles(getBrowserStore(), keys.puzzles))
+  const [quizData, setQuizData] = useState<QuizData>(() => loadQuizzes(getBrowserStore(), keys.quizzes))
   const { completed } = useLearning()
 
-  const savePuzzle = useCallback((date: string, s: Submission) => {
-    setSubmissions((prev) => {
-      if (prev[date]) return prev // the first answer counts
-      const next = { ...prev, [date]: s }
-      write(PUZZLES_KEY, { submissions: next })
-      return next
-    })
-  }, [])
+  // A sync wrote new progress to storage: show it.
+  useEffect(() => {
+    const reload = () => {
+      setSubmissions(loadPuzzles(getBrowserStore(), keys.puzzles))
+      setQuizData(loadQuizzes(getBrowserStore(), keys.quizzes))
+    }
+    window.addEventListener(PROGRESS_RELOAD_EVENT, reload)
+    return () => window.removeEventListener(PROGRESS_RELOAD_EVENT, reload)
+  }, [keys])
 
-  const recordQuiz = useCallback((attempt: QuizAttempt, questions: Question[]) => {
-    setQuizData((prev) => {
-      const wrong = new Set(attempt.results.filter((r) => !r.correct).map((r) => r.questionId))
-      const right = new Set(attempt.results.filter((r) => r.correct).map((r) => r.questionId))
-      const newlyMissed = questions.filter((q) => wrong.has(q.id))
-      const missed = [...newlyMissed, ...prev.missed.filter((q) => !right.has(q.id) && !wrong.has(q.id))].slice(0, MAX_MISSED)
-      const next = { attempts: [...prev.attempts, attempt], missed }
-      write(QUIZZES_KEY, next)
-      return next
-    })
-  }, [])
+  const savePuzzle = useCallback(
+    (date: string, s: Submission) => {
+      setSubmissions((prev) => {
+        if (prev[date]) return prev // the first answer counts
+        const next = { ...prev, [date]: s }
+        writeLocalChange(getBrowserStore(), keys.puzzles, { submissions: next })
+        return next
+      })
+    },
+    [keys],
+  )
+
+  const recordQuiz = useCallback(
+    (attempt: QuizAttempt, questions: Question[]) => {
+      setQuizData((prev) => {
+        const wrong = new Set(attempt.results.filter((r) => !r.correct).map((r) => r.questionId))
+        const right = new Set(attempt.results.filter((r) => r.correct).map((r) => r.questionId))
+        const newlyMissed = questions.filter((q) => wrong.has(q.id))
+        const missed = [...newlyMissed, ...prev.missed.filter((q) => !right.has(q.id) && !wrong.has(q.id))].slice(0, MAX_MISSED)
+        const next: QuizData = { attempts: [...prev.attempts, attempt], missed, missedAt: new Date().toISOString() }
+        writeLocalChange(getBrowserStore(), keys.quizzes, next)
+        return next
+      })
+    },
+    [keys],
+  )
 
   const quiz = useMemo(() => quizStats(quizData.attempts), [quizData.attempts])
   const achievements = useMemo(() => {
@@ -136,37 +108,32 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   )
   return (
     <ProgressContext.Provider value={value}>
-      <AchievementWatcher achievements={achievements} />
+      <AchievementWatcher achievements={achievements} storageKey={keys.achievements} />
       {children}
     </ProgressContext.Provider>
   )
 }
 
 /** Announces newly unlocked achievements once each. Existing unlocks are recorded silently on first run. */
-function AchievementWatcher({ achievements }: { achievements: AchievementStatus[] }) {
+function AchievementWatcher({ achievements, storageKey }: { achievements: AchievementStatus[]; storageKey: string }) {
   const toast = useToast()
-  const seen = useRef<Set<string> | null>(null)
 
   useEffect(() => {
+    const store = getBrowserStore()
     const unlocked = achievements.filter((a) => a.unlocked)
-    if (seen.current === null) {
-      const stored = read<{ seen?: string[] } | null>(ACHIEVEMENTS_KEY, null)
-      seen.current = new Set(stored?.seen ?? [])
-      if (!stored) {
-        // First run: don't announce things earned before achievements existed.
-        unlocked.forEach((a) => seen.current!.add(a.id))
-        write(ACHIEVEMENTS_KEY, { seen: [...seen.current] })
-        return
-      }
+    // Read every time: a sync may have added ones already announced on another device.
+    const stored = loadSeen(store, storageKey)
+    if (stored === null) {
+      // First run: don't announce things earned before achievements existed.
+      write(store, storageKey, { seen: unlocked.map((a) => a.id) })
+      return
     }
-    const fresh = unlocked.filter((a) => !seen.current!.has(a.id))
+    const seen = new Set(stored)
+    const fresh = unlocked.filter((a) => !seen.has(a.id))
     if (!fresh.length) return
-    fresh.forEach((a) => {
-      seen.current!.add(a.id)
-      toast(`Achievement unlocked: ${a.name}`)
-    })
-    write(ACHIEVEMENTS_KEY, { seen: [...seen.current] })
-  }, [achievements, toast])
+    fresh.forEach((a) => toast(`Achievement unlocked: ${a.name}`))
+    writeLocalChange(store, storageKey, { seen: [...seen, ...fresh.map((a) => a.id)] })
+  }, [achievements, toast, storageKey])
 
   return null
 }

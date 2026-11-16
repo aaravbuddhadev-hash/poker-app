@@ -3,6 +3,8 @@ import { Link } from 'react-router'
 import { DownloadIcon } from '../components/icons'
 import { LESSONS } from '../learn/lessons'
 import { AchievementBadge } from '../components/AchievementBadge'
+import { AccountCard } from '../components/account/AccountCard'
+import { useAuth } from '../state/AuthProvider'
 import { useLearning } from '../state/LearningProvider'
 import { useProgress } from '../state/ProgressProvider'
 import { recapYears } from '../recap/yearInReview'
@@ -27,6 +29,7 @@ function download(filename: string, text: string) {
 
 export function ProfilePage() {
   const { sessions, isDemo, clearAll, today } = useSessions()
+  const { user } = useAuth()
   const { settings, update } = useSettings()
   const toast = useToast()
   const [confirmClear, setConfirmClear] = useState(false)
@@ -39,7 +42,7 @@ export function ProfilePage() {
 
   return (
     <div className="grid gap-5">
-      <PageHeader title="Profile" subtitle={isDemo ? 'Showing demo data' : 'Your records and settings'} />
+      <PageHeader title="Profile" subtitle={isDemo ? 'Showing demo data' : user ? user.email : 'Your records and settings'} />
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <StatTile label="Sessions" value={summary.count} />
@@ -163,7 +166,13 @@ export function ProfilePage() {
           </Row>
           <Row
             label={isDemo ? 'Reset demo data' : 'Delete all sessions'}
-            hint={isDemo ? 'Restores the original demo sessions.' : 'Permanently removes every session saved on this device. Export first if you want a copy.'}
+            hint={
+              isDemo
+                ? 'Restores the original demo sessions.'
+                : user
+                  ? 'Permanently removes every session in your account, on all your devices. Export first if you want a copy.'
+                  : 'Permanently removes every session saved on this device. Export first if you want a copy.'
+            }
           >
             {confirmClear ? (
               <div className="flex gap-2">
@@ -191,12 +200,7 @@ export function ProfilePage() {
         </div>
       </Card>
 
-      <Card title="Account">
-        <p className="text-sm text-muted max-w-prose">
-          Your sessions are saved in this browser on this device, and nothing is sent anywhere. Sign-in and cloud sync, so you can use Riverline on several
-          devices, are the next backend step.
-        </p>
-      </Card>
+      <AccountCard />
     </div>
   )
 }

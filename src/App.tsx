@@ -19,14 +19,30 @@ import { SessionFormProvider } from './state/SessionFormProvider'
 import { SessionsProvider } from './state/SessionsProvider'
 import { SettingsProvider } from './state/SettingsProvider'
 import { ToastProvider } from './state/ToastProvider'
+import { AuthProvider, useAuth } from './state/AuthProvider'
+import type { ReactNode } from 'react'
+import { NewPasswordDialog } from './components/account/NewPasswordDialog'
+
+/** Learning progress belongs to whoever is signed in: start fresh from their own data when that changes. */
+function AccountScope({ children }: { children: ReactNode }) {
+  const { user } = useAuth()
+  return (
+    <LearningProvider key={user?.id ?? 'guest'}>
+      <ProgressProvider>
+        {children}
+        <NewPasswordDialog />
+      </ProgressProvider>
+    </LearningProvider>
+  )
+}
 
 export default function App() {
   return (
     <SettingsProvider>
       <ToastProvider>
+        <AuthProvider>
         <SessionsProvider>
-          <LearningProvider>
-          <ProgressProvider>
+          <AccountScope>
           <SessionFormProvider>
             {/* Hash routing works on any static host, including GitHub Pages. */}
             <HashRouter>
@@ -51,9 +67,9 @@ export default function App() {
               </Routes>
             </HashRouter>
           </SessionFormProvider>
-          </ProgressProvider>
-          </LearningProvider>
+          </AccountScope>
         </SessionsProvider>
+        </AuthProvider>
       </ToastProvider>
     </SettingsProvider>
   )
