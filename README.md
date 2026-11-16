@@ -1,11 +1,52 @@
-# Poker App
+# River · Poker Companion
 
-A poker web app built with React and TypeScript. 🚧 Work in progress.
+> Working name. Final branding is pending; see [`branding/concepts.html`](branding/concepts.html).
+
+A poker companion web app for **recording your own session results** and **learning Texas Hold'em**. Track your lifetime net, see your trends in charts, and (coming soon) practice probability with a daily puzzle on a virtual poker table.
+
+River is for personal recordkeeping and education only. It never handles money, wagers or payments.
+
+## What works today
+
+- **Session tracker**: add, edit and delete sessions. Enter a net result directly, or record start and end amounts and let the app calculate the net. Optional duration, game type and notes.
+- **Dashboard**: an animated lifetime net, 8 key stats, and a cumulative results chart (7D / 30D / 90D / Year / All).
+- **History**: search notes, filter by date range, game type and result, and sort four ways.
+- **Calendar**: a month view colored by daily result, where you can add a session for any day.
+- **Analytics**: personal records, cumulative and monthly charts, an outcome donut, a GitHub-style yearly heatmap, and a game type comparison.
+- **Demo mode**: fictional, clearly labeled data, stored separately from your real records.
+- **Settings**: currency, dark and light themes, CSV export, and delete all.
+- Responsive layout: bottom navigation on phones and a sidebar on desktop.
 
 ## Tech stack
 
-- [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
-- [Vite](https://vite.dev/) for development and builds
+| Area | Choice | Why |
+| --- | --- | --- |
+| UI | React 19 + TypeScript (strict) | Typed, component-based UI |
+| Build | Vite | Fast dev server and builds |
+| Styling | Tailwind CSS v4 with CSS-variable theme tokens | One palette drives light and dark themes |
+| Charts | Recharts | Interactive, accessible SVG charts |
+| Animation | Motion | Sheet, toast and hero transitions |
+| Tests | Vitest | Fast unit tests for all calculation logic |
+
+## Design decisions
+
+- **Money is stored as integer cents.** Amounts are parsed from the typed digits, never by multiplying floats, so totals can't drift (`0.1 + 0.2` problems are impossible). Formatting to a currency happens only for display.
+- **Calculation logic is pure and separate from the UI.** `src/domain/analytics.ts` has no React or storage code, so every number on screen is unit-tested.
+- **Storage sits behind an interface.** `SessionRepository` is implemented with `localStorage` today. A cloud version (for example Supabase with row-level security, for accounts and multi-device sync) can replace it without touching any screen.
+- **Stored data is validated when it's read back**, so a corrupt record is skipped instead of crashing the app.
+- **CSV export guards against formula injection** in spreadsheet apps.
+
+## Project structure
+
+```
+src/
+  lib/          money (cents), dates, CSV: pure helpers
+  domain/       session validation and analytics: pure, unit-tested
+  data/         storage interface, localStorage implementation, demo data
+  state/        React providers: settings, sessions, toast, add/edit form
+  components/   UI building blocks, charts, heatmap, calendar, app shell
+  pages/        Home, Sessions, Profile, and the upcoming feature pages
+```
 
 ## Getting started
 
@@ -16,20 +57,24 @@ npm install
 npm run dev
 ```
 
-Then open the URL shown in the terminal (usually http://localhost:5173).
+Then open http://localhost:5173.
 
-## Scripts
-
-| Command           | What it does                         |
-| ----------------- | ------------------------------------ |
-| `npm run dev`     | Start the dev server with hot reload |
-| `npm run build`   | Type-check and build for production  |
-| `npm run preview` | Preview the production build         |
-| `npm run lint`    | Lint the code                        |
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Start the dev server |
+| `npm test` | Run the unit tests |
+| `npm run build` | Type-check and build for production |
+| `npm run lint` | Lint with oxlint |
 
 ## Roadmap
 
-- [ ] Card deck and shuffling
-- [ ] Hand ranking / evaluation
-- [ ] Game flow (dealing, betting rounds)
-- [ ] UI for the table and player hands
+- [x] Phase 1: Architecture plan and branding concepts
+- [x] Phase 2: Session tracker, dashboard, history, local storage
+- [x] Phase 3: Analytics (cumulative, monthly, outcomes, heatmap, game types)
+- [ ] Phase 4: Hand rankings, rules guide, glossary
+- [ ] Phase 5: Hand evaluator, exact equity engine, virtual poker table
+- [ ] Phase 6: Daily probability puzzle
+- [ ] Phase 7: Knowledge quizzes and achievements
+- [ ] Phase 8: Year in Review
+- [ ] Phase 9: Final branding (name, logo, icons)
+- [ ] Phase 10: Accounts and cloud sync, polish, deployment

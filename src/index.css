@@ -1,111 +1,106 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+@import 'tailwindcss';
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+/*
+ * Temporary "River" brand, Direction A (Premium Poker): charcoal, emerald felt,
+ * gold accents. Values mirror src/components/theme.ts, which charts read.
+ */
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0e1211;
+  --surface: #161c1a;
+  --surface-2: #1d2522;
+  --line: #27322e;
+  --fg: #e8ece9;
+  --muted: #94a39c;
+  --emerald: #1fa971;
+  --felt: #123d2d;
+  --gold: #d4b062;
+  --pos: #3dd68c;
+  --neg: #f0675d;
+  --even: #8c9a94;
+  --on-accent: #06120d;
+}
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
+[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f5f3ee;
+  --surface: #ffffff;
+  --surface-2: #eeece6;
+  --line: #dedbd2;
+  --fg: #141816;
+  --muted: #5b6761;
+  --emerald: #0f7a52;
+  --felt: #e1eee6;
+  --gold: #8f6e24;
+  --pos: #0f8050;
+  --neg: #c0392b;
+  --even: #6b7570;
+  --on-accent: #ffffff;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-emerald: var(--emerald);
+  --color-felt: var(--felt);
+  --color-gold: var(--gold);
+  --color-pos: var(--pos);
+  --color-neg: var(--neg);
+  --color-even: var(--even);
+  --color-on-accent: var(--on-accent);
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+}
+
+html,
+body {
   background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  color: var(--fg);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  margin: 0;
+  min-height: 100dvh;
 }
 
 h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+h2,
+h3 {
+  text-wrap: balance;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hero card felt texture: a soft emerald glow, no busy gradients. */
+.felt-glow {
+  background:
+    radial-gradient(120% 140% at 0% 0%, color-mix(in oklab, var(--emerald) 22%, transparent) 0%, transparent 55%),
+    linear-gradient(160deg, var(--felt), color-mix(in oklab, var(--felt) 60%, var(--bg)));
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+[data-theme='dark'] input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(0.8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
 }

@@ -1,0 +1,274 @@
+<title>River Brand Concepts</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;600;700&family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@500;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one reading column; logo + direction grids that collapse to a single column on phones. Deliberately single dark theme (it mirrors the app's dark-first look). */
+:root {
+  color-scheme: dark;
+  --bg: #0E1211;
+  --surface: #161C1A;
+  --line: #26302C;
+  --fg: #E8ECE9;
+  --muted: #94A39C;
+  --emerald: #1FA971;
+  --gold: #D4B062;
+  --red: #E0645A;
+  --display: "Fraunces", Georgia, serif;
+  --body: "Manrope", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body); }
+.wrap { max-width: 1040px; margin: 0 auto; padding-block: 40px 80px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(32px, 5vw, 48px); line-height: 1.1; }
+h2 { font-size: 26px; }
+h3 { font-size: 18px; }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font: 600 12px/1 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+.lede { color: var(--muted); font-size: 17px; }
+section { display: grid; gap: 20px; }
+.note { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; color: var(--muted); font-size: 14px; }
+.note b { color: var(--fg); }
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; }
+table { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 14px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+tr:last-child td { border-bottom: 0; }
+td.name { font-family: var(--display); font-size: 17px; white-space: nowrap; }
+td.score { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.chk { font-size: 13px; color: var(--muted); }
+.chk .v { color: var(--emerald); font-weight: 600; }
+.chk .w { color: var(--red); font-weight: 600; }
+.top5 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.pick { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 4px; align-content: start; }
+.pick .rank { font: 500 12px var(--mono); color: var(--gold); }
+.pick .nm { font: 700 22px var(--display); }
+.pick .tag { color: var(--muted); font-size: 13px; }
+.logos { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+.logo { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: grid; gap: 10px; align-content: start; }
+.logo svg { width: 100%; max-width: 120px; height: auto; justify-self: center; }
+.logo .pair { display: flex; gap: 10px; justify-content: center; }
+.logo .pair div { width: 54px; height: 54px; border-radius: 12px; display: grid; place-items: center; }
+.logo .pair svg { max-width: 38px; }
+.logo h3 { font-size: 16px; }
+.logo p { font-size: 13px; color: var(--muted); }
+.dirs { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.dir { border-radius: 16px; overflow: hidden; border: 1px solid var(--line); display: grid; }
+.dir .head { padding: 20px; display: grid; gap: 14px; }
+.dir .meta { background: var(--surface); padding: 16px 20px; display: grid; gap: 10px; font-size: 13px; color: var(--muted); }
+.dir .meta b { color: var(--fg); font-weight: 600; }
+.sw { display: flex; flex-wrap: wrap; gap: 6px; }
+.sw span { display: inline-flex; align-items: center; gap: 6px; font: 500 11px var(--mono); }
+.sw i { width: 16px; height: 16px; border-radius: 4px; display: inline-block; border: 1px solid rgba(128,128,128,.4); }
+.mock { border-radius: 14px; padding: 16px; display: grid; gap: 6px; }
+.mock .lbl { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .7; }
+.mock .big { font-size: 34px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.mock .row { display: flex; gap: 14px; font-size: 12px; opacity: .8; flex-wrap: wrap; }
+.brandline { display: flex; align-items: center; gap: 10px; }
+.brandline svg { width: 32px; height: 32px; }
+ol.next { margin: 0; padding-left: 20px; display: grid; gap: 6px; color: var(--muted); }
+ol.next b { color: var(--fg); }
+a { color: var(--emerald); }
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:12px">
+    <span class="eyebrow">Working name: River · For review</span>
+    <h1>Name, logo and brand concepts for your poker companion app</h1>
+    <p class="lede">Pick a name and a direction. Until you choose, the app keeps the temporary name "River" and Direction A colors.</p>
+  </header>
+
+  <section>
+    <span class="eyebrow">Top five names</span>
+    <div class="top5">
+      <div class="pick"><span class="rank">#1 · 9/10</span><span class="nm">Riverline</span><span class="tag">Every session, one line.</span></div>
+      <div class="pick"><span class="rank">#2 · 8.5/10</span><span class="nm">Kicker</span><span class="tag">The card that decides it.</span></div>
+      <div class="pick"><span class="rank">#3 · 8/10</span><span class="nm">Outs</span><span class="tag">Know your outs.</span></div>
+      <div class="pick"><span class="rank">#4 · 7.5/10</span><span class="nm">Nutline</span><span class="tag">Always know the nuts.</span></div>
+      <div class="pick"><span class="rank">#5 · 7/10</span><span class="nm">Stackbook</span><span class="tag">Your stack, on the record.</span></div>
+    </div>
+    <div class="note"><b>Why not "River"?</b> A poker training app called "River – Gamified Poker Lessons" is already on the App Store (verified by search), and "River" is also a well-known bitcoin app from River Financial. Riverline keeps the idea and avoids both.</div>
+  </section>
+
+  <section>
+    <span class="eyebrow">All 15 names</span>
+    <h2>Name ideas, with what I could check</h2>
+    <p class="chk"><span class="v">Verified</span> = I checked it with a web search or a whois domain lookup on 15 Nov 2026. Everything else is my judgment. No trademark database was searched, so run a USPTO search on your pick before committing.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Name</th><th>Inspiration</th><th>Why it fits</th><th>Tagline</th><th>Score</th><th>Checks</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Riverline</td><td>The river (last card) + a results line chart</td><td>Joins the poker and analytics halves of the app in one word</td><td>Every session, one line.</td><td class="score">9/10</td><td class="chk"><span class="v">Verified:</span> no app by this name found; riverline.com taken (2002); riverlineapp.com unregistered</td></tr>
+        <tr><td class="name">Kicker</td><td>The side card that breaks ties</td><td>Short and punchy, and the app teaches tie-breakers</td><td>The card that decides it.</td><td class="score">8.5/10</td><td class="chk"><span class="v">Verified:</span> no poker app found; getkicker.com and kickerapp.com taken. <span class="w">Risk:</span> Kicker is an established car-audio brand</td></tr>
+        <tr><td class="name">Outs</td><td>Cards that improve your hand</td><td>Maps straight to the probability puzzles</td><td>Know your outs.</td><td class="score">8/10</td><td class="chk"><span class="v">Verified:</span> no app named exactly "Outs"; outspoker.com taken; outsapp.com registered Sep 2026. Hard to search for</td></tr>
+        <tr><td class="name">Nutline</td><td>"The nuts" (best possible hand) + line chart</td><td>Insider poker term with an analytics twist</td><td>Always know the nuts.</td><td class="score">7.5/10</td><td class="chk">Not checked</td></tr>
+        <tr><td class="name">Stackbook</td><td>Your chip stack + a ledger book</td><td>Says "recordkeeping" without saying "bankroll"</td><td>Your stack, on the record.</td><td class="score">7/10</td><td class="chk"><span class="v">Verified:</span> stackbookapp.com unregistered</td></tr>
+        <tr><td class="name">Pip</td><td>The suit symbols printed on cards</td><td>Tiny, friendly, great as an icon</td><td>The details that matter.</td><td class="score">7/10</td><td class="chk"><span class="v">Verified:</span> pipcards.com taken. Very common word</td></tr>
+        <tr><td class="name">Suited</td><td>Two hole cards of the same suit</td><td>Sounds premium and tailored</td><td>Poker, well suited.</td><td class="score">7/10</td><td class="chk"><span class="v">Verified:</span> no app found; suitedpoker.com registered Aug 2026; an app called "Offsuit" exists, so confusion is possible</td></tr>
+        <tr><td class="name">Felt</td><td>The table surface</td><td>Tactile and minimal</td><td>Feel the table.</td><td class="score">6.5/10</td><td class="chk">Not checked; Felt is already a known mapping-software brand</td></tr>
+        <tr><td class="name">Pocketbook</td><td>Pocket pair + ledger</td><td>Clever pun on recordkeeping</td><td>Your game, pocket-sized.</td><td class="score">6.5/10</td><td class="chk">Not checked; likely clashes with existing budgeting apps</td></tr>
+        <tr><td class="name">River</td><td>The final community card</td><td>Simple and calm</td><td>See it to the river.</td><td class="score">6/10</td><td class="chk"><span class="w">Conflict:</span> "River – Gamified Poker Lessons" on the App Store; River Financial bitcoin app</td></tr>
+        <tr><td class="name">FlopIQ</td><td>The flop + intelligence</td><td>Says "smart poker" right away</td><td>Think past the flop.</td><td class="score">6/10</td><td class="chk"><span class="v">Verified:</span> flopiq.com registered Jan 2025</td></tr>
+        <tr><td class="name">Chipwise</td><td>Chips + wise</td><td>Friendly, a little educational</td><td>Play it wise.</td><td class="score">6/10</td><td class="chk">Not checked</td></tr>
+        <tr><td class="name">Showdown</td><td>When hands are revealed</td><td>Dramatic, fits the recap feature</td><td>Every hand tells a story.</td><td class="score">5.5/10</td><td class="chk">Not checked; very common name across games</td></tr>
+        <tr><td class="name">Railbird</td><td>A spectator watching the game</td><td>Fits learning by watching</td><td>Watch. Learn. Play smarter.</td><td class="score">5/10</td><td class="chk"><span class="w">Conflict:</span> "RailBird Poker" is on the App Store</td></tr>
+        <tr><td class="name">Equity</td><td>Your share of the pot</td><td>Bridges poker and finance</td><td>Know your share.</td><td class="score">5/10</td><td class="chk">Not checked; too generic to own</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Logo concepts</span>
+    <h2>Five marks, each shown full size and as an app icon on dark and light</h2>
+    <div class="logos">
+
+      <div class="logo">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Card with rising chart line">
+          <rect x="28" y="16" width="64" height="88" rx="10" fill="none" stroke="#1FA971" stroke-width="5"/>
+          <polyline points="40,82 54,66 64,72 80,40" fill="none" stroke="#E8ECE9" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="80" cy="40" r="6" fill="#D4B062"/>
+        </svg>
+        <div class="pair">
+          <div style="background:#0E1211"><svg viewBox="0 0 120 120"><rect x="28" y="16" width="64" height="88" rx="10" fill="none" stroke="#1FA971" stroke-width="7"/><polyline points="40,82 54,66 64,72 80,40" fill="none" stroke="#E8ECE9" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="80" cy="40" r="8" fill="#D4B062"/></svg></div>
+          <div style="background:#F5F3EE"><svg viewBox="0 0 120 120"><rect x="28" y="16" width="64" height="88" rx="10" fill="none" stroke="#0F6B4A" stroke-width="7"/><polyline points="40,82 54,66 64,72 80,40" fill="none" stroke="#141816" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="80" cy="40" r="8" fill="#B8913A"/></svg></div>
+        </div>
+        <h3>1 · Card Line</h3>
+        <p>A playing card holding a results line that ends in a gold point. Best fit for Riverline or Stackbook.</p>
+      </div>
+
+      <div class="logo">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Poker chip with spade">
+          <circle cx="60" cy="60" r="48" fill="#0F6B4A"/>
+          <circle cx="60" cy="60" r="40" fill="none" stroke="#F3EBD6" stroke-width="8" stroke-dasharray="14 17.42"/>
+          <circle cx="60" cy="60" r="28" fill="#141816"/>
+          <path d="M60 42 C52 52 42 56 42 64 C42 71 50 74 56 69 L54 78 L66 78 L64 69 C70 74 78 71 78 64 C78 56 68 52 60 42 Z" fill="#D4B062"/>
+        </svg>
+        <div class="pair">
+          <div style="background:#0E1211"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="48" fill="#0F6B4A"/><circle cx="60" cy="60" r="40" fill="none" stroke="#F3EBD6" stroke-width="8" stroke-dasharray="14 17.42"/><circle cx="60" cy="60" r="28" fill="#141816"/><path d="M60 42 C52 52 42 56 42 64 C42 71 50 74 56 69 L54 78 L66 78 L64 69 C70 74 78 71 78 64 C78 56 68 52 60 42 Z" fill="#D4B062"/></svg></div>
+          <div style="background:#F5F3EE"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="48" fill="#0F6B4A"/><circle cx="60" cy="60" r="40" fill="none" stroke="#F5F3EE" stroke-width="8" stroke-dasharray="14 17.42"/><circle cx="60" cy="60" r="28" fill="#F5F3EE"/><path d="M60 42 C52 52 42 56 42 64 C42 71 50 74 56 69 L54 78 L66 78 L64 69 C70 74 78 71 78 64 C78 56 68 52 60 42 Z" fill="#0F6B4A"/></svg></div>
+        </div>
+        <h3>2 · Minimal Chip</h3>
+        <p>A clean chip with eight edge spots and a gold spade. The most classic of the five, and instantly reads as poker.</p>
+      </div>
+
+      <div class="logo">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Spade with chart line breaking out">
+          <path d="M60 14 C44 34 22 44 22 64 C22 80 40 86 52 76 L48 100 L72 100 L68 76 C80 86 98 80 98 64 C98 44 76 34 60 14 Z" fill="#1FA971"/>
+          <polyline points="28,74 46,60 58,67 76,46 94,34" fill="none" stroke="#0E1211" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="94" cy="34" r="6" fill="#D4B062"/>
+        </svg>
+        <div class="pair">
+          <div style="background:#0E1211"><svg viewBox="0 0 120 120"><path d="M60 14 C44 34 22 44 22 64 C22 80 40 86 52 76 L48 100 L72 100 L68 76 C80 86 98 80 98 64 C98 44 76 34 60 14 Z" fill="#1FA971"/><polyline points="28,74 46,60 58,67 76,46 94,34" fill="none" stroke="#0E1211" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="94" cy="34" r="8" fill="#D4B062"/></svg></div>
+          <div style="background:#F5F3EE"><svg viewBox="0 0 120 120"><path d="M60 14 C44 34 22 44 22 64 C22 80 40 86 52 76 L48 100 L72 100 L68 76 C80 86 98 80 98 64 C98 44 76 34 60 14 Z" fill="#0F6B4A"/><polyline points="28,74 46,60 58,67 76,46 94,34" fill="none" stroke="#F5F3EE" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="94" cy="34" r="8" fill="#B8913A"/></svg></div>
+        </div>
+        <h3>3 · Breakout Spade</h3>
+        <p>A spade cut by a rising line that escapes its edge. Bold and recognizable at small sizes.</p>
+      </div>
+
+      <div class="logo">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Five cards rising like a bar chart">
+          <rect x="14" y="66" width="16" height="30" rx="3" fill="none" stroke="#1FA971" stroke-width="4"/>
+          <rect x="34" y="56" width="16" height="40" rx="3" fill="none" stroke="#1FA971" stroke-width="4"/>
+          <rect x="54" y="60" width="16" height="36" rx="3" fill="none" stroke="#1FA971" stroke-width="4"/>
+          <rect x="74" y="42" width="16" height="54" rx="3" fill="none" stroke="#1FA971" stroke-width="4"/>
+          <rect x="94" y="24" width="16" height="72" rx="3" fill="#D4B062"/>
+        </svg>
+        <div class="pair">
+          <div style="background:#0E1211"><svg viewBox="0 0 120 120"><rect x="14" y="66" width="16" height="30" rx="3" fill="none" stroke="#1FA971" stroke-width="6"/><rect x="34" y="56" width="16" height="40" rx="3" fill="none" stroke="#1FA971" stroke-width="6"/><rect x="54" y="60" width="16" height="36" rx="3" fill="none" stroke="#1FA971" stroke-width="6"/><rect x="74" y="42" width="16" height="54" rx="3" fill="none" stroke="#1FA971" stroke-width="6"/><rect x="94" y="24" width="16" height="72" rx="3" fill="#D4B062"/></svg></div>
+          <div style="background:#F5F3EE"><svg viewBox="0 0 120 120"><rect x="14" y="66" width="16" height="30" rx="3" fill="none" stroke="#0F6B4A" stroke-width="6"/><rect x="34" y="56" width="16" height="40" rx="3" fill="none" stroke="#0F6B4A" stroke-width="6"/><rect x="54" y="60" width="16" height="36" rx="3" fill="none" stroke="#0F6B4A" stroke-width="6"/><rect x="74" y="42" width="16" height="54" rx="3" fill="none" stroke="#0F6B4A" stroke-width="6"/><rect x="94" y="24" width="16" height="72" rx="3" fill="#B8913A"/></svg></div>
+        </div>
+        <h3>4 · The Board</h3>
+        <p>The five community cards drawn as a bar chart, with the river card in gold. Literal and clever for Riverline.</p>
+      </div>
+
+      <div class="logo">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Diamond with percent sign">
+          <path d="M60 12 L104 60 L60 108 L16 60 Z" fill="none" stroke="#1FA971" stroke-width="6" stroke-linejoin="round"/>
+          <line x1="76" y1="44" x2="44" y2="76" stroke="#E8ECE9" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="47" cy="47" r="7" fill="#D4B062"/>
+          <circle cx="73" cy="73" r="7" fill="#D4B062"/>
+        </svg>
+        <div class="pair">
+          <div style="background:#0E1211"><svg viewBox="0 0 120 120"><path d="M60 12 L104 60 L60 108 L16 60 Z" fill="none" stroke="#1FA971" stroke-width="8" stroke-linejoin="round"/><line x1="76" y1="44" x2="44" y2="76" stroke="#E8ECE9" stroke-width="8" stroke-linecap="round"/><circle cx="47" cy="47" r="8" fill="#D4B062"/><circle cx="73" cy="73" r="8" fill="#D4B062"/></svg></div>
+          <div style="background:#F5F3EE"><svg viewBox="0 0 120 120"><path d="M60 12 L104 60 L60 108 L16 60 Z" fill="none" stroke="#0F6B4A" stroke-width="8" stroke-linejoin="round"/><line x1="76" y1="44" x2="44" y2="76" stroke="#141816" stroke-width="8" stroke-linecap="round"/><circle cx="47" cy="47" r="8" fill="#B8913A"/><circle cx="73" cy="73" r="8" fill="#B8913A"/></svg></div>
+        </div>
+        <h3>5 · Odds Diamond</h3>
+        <p>A diamond pip framing a percent sign made of two pips. Leans into probability; strongest for Outs.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Brand directions</span>
+    <h2>Three visual directions</h2>
+    <div class="dirs">
+
+      <div class="dir">
+        <div class="head" style="background:#0F1412;color:#EDE7D6">
+          <div class="brandline"><svg viewBox="0 0 120 120"><rect x="28" y="16" width="64" height="88" rx="10" fill="none" stroke="#1FA971" stroke-width="7"/><polyline points="40,82 54,66 64,72 80,40" fill="none" stroke="#EDE7D6" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="80" cy="40" r="8" fill="#D4B062"/></svg><span style="font:700 22px var(--display)">Riverline</span></div>
+          <div class="mock" style="background:linear-gradient(160deg,#123D2D,#0B241B);border:1px solid #1E5440">
+            <span class="lbl" style="color:#D4B062">Lifetime net results</span>
+            <span class="big" style="font-family:var(--display);font-weight:700">+$1,284.50</span>
+            <div class="row"><span>42 sessions</span><span>62% positive</span></div>
+          </div>
+        </div>
+        <div class="meta">
+          <h3 style="color:var(--fg)">A · Premium Poker</h3>
+          <div class="sw"><span><i style="background:#0F1412"></i>#0F1412</span><span><i style="background:#123D2D"></i>#123D2D</span><span><i style="background:#1FA971"></i>#1FA971</span><span><i style="background:#D4B062"></i>#D4B062</span><span><i style="background:#EDE7D6"></i>#EDE7D6</span></div>
+          <span><b>Type:</b> Fraunces for headlines and big numbers, Manrope for UI text.</span>
+          <span><b>Logo fit:</b> Card Line or Minimal Chip, gold used sparingly.</span>
+          <span><b>Feel:</b> a private members' club crossed with a private bank statement.</span>
+        </div>
+      </div>
+
+      <div class="dir">
+        <div class="head" style="background:#0B0D0E;color:#E6F0EA">
+          <div class="brandline"><svg viewBox="0 0 120 120"><rect x="14" y="66" width="16" height="30" rx="3" fill="none" stroke="#2BE38B" stroke-width="6"/><rect x="34" y="56" width="16" height="40" rx="3" fill="none" stroke="#2BE38B" stroke-width="6"/><rect x="54" y="60" width="16" height="36" rx="3" fill="none" stroke="#2BE38B" stroke-width="6"/><rect x="74" y="42" width="16" height="54" rx="3" fill="none" stroke="#2BE38B" stroke-width="6"/><rect x="94" y="24" width="16" height="72" rx="3" fill="#2BE38B"/></svg><span style="font:700 22px 'Space Grotesk',sans-serif">riverline</span></div>
+          <div class="mock" style="background:#14181A;border:1px solid #2A3236">
+            <span class="lbl" style="font-family:var(--mono);color:#2BE38B">net_lifetime</span>
+            <span class="big" style="font-family:var(--mono)">+1,284.50</span>
+            <div class="row" style="font-family:var(--mono)"><span>n=42</span><span>win%=62.0</span></div>
+          </div>
+        </div>
+        <div class="meta">
+          <h3 style="color:var(--fg)">B · Modern Tech</h3>
+          <div class="sw"><span><i style="background:#0B0D0E"></i>#0B0D0E</span><span><i style="background:#14181A"></i>#14181A</span><span><i style="background:#2BE38B"></i>#2BE38B</span><span><i style="background:#7C8A92"></i>#7C8A92</span><span><i style="background:#E6F0EA"></i>#E6F0EA</span></div>
+          <span><b>Type:</b> Space Grotesk for headings, JetBrains Mono for numbers.</span>
+          <span><b>Logo fit:</b> The Board or Odds Diamond, single-color.</span>
+          <span><b>Feel:</b> a trading terminal for your own stats.</span>
+        </div>
+      </div>
+
+      <div class="dir">
+        <div class="head" style="background:#F6F5F1;color:#1B2420">
+          <div class="brandline"><svg viewBox="0 0 120 120"><path d="M60 14 C44 34 22 44 22 64 C22 80 40 86 52 76 L48 100 L72 100 L68 76 C80 86 98 80 98 64 C98 44 76 34 60 14 Z" fill="#245C3F"/><polyline points="28,74 46,60 58,67 76,46 94,34" fill="none" stroke="#F6F5F1" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="94" cy="34" r="8" fill="#245C3F"/></svg><span style="font:700 22px 'Plus Jakarta Sans',sans-serif">Riverline</span></div>
+          <div class="mock" style="background:#FFFFFF;border:1px solid #E2E0D8">
+            <span class="lbl" style="color:#245C3F">Lifetime net results</span>
+            <span class="big" style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700">+$1,284.50</span>
+            <div class="row"><span>42 sessions</span><span>62% positive</span></div>
+          </div>
+        </div>
+        <div class="meta">
+          <h3 style="color:var(--fg)">C · Clean Minimal</h3>
+          <div class="sw"><span><i style="background:#F6F5F1"></i>#F6F5F1</span><span><i style="background:#FFFFFF"></i>#FFFFFF</span><span><i style="background:#245C3F"></i>#245C3F</span><span><i style="background:#8C948F"></i>#8C948F</span><span><i style="background:#1B2420"></i>#1B2420</span></div>
+          <span><b>Type:</b> Plus Jakarta Sans throughout, with Inter as a fallback.</span>
+          <span><b>Logo fit:</b> Breakout Spade, one color.</span>
+          <span><b>Feel:</b> calm and approachable, closer to a habit tracker than a casino.</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <span class="eyebrow">What I need from you</span>
+    <ol class="next">
+      <li><b>A name</b> from the list, or your own.</li>
+      <li><b>A logo concept</b> (1 to 5), or a mix, e.g. "the Card Line mark in Direction B colors".</li>
+      <li><b>A direction</b>: A, B or C.</li>
+    </ol>
+    <p class="chk">My recommendation: <b style="color:var(--fg)">Riverline + Card Line logo + Direction A</b>. It matches the emerald, charcoal and gold look you described, and the name has no conflicts I could find. After you approve, I'll make the final SVG/PNG logos, app icon, favicon, splash screen and a short style guide.</p>
+  </section>
+</div>
