@@ -17,6 +17,11 @@ Brand guide, logos and icons: [`branding/BRAND.md`](branding/BRAND.md).
 - **History**: search notes, filter by date range, game type and result, and sort four ways.
 - **Calendar**: a month view colored by daily result, where you can add a session for any day.
 - **Analytics**: personal records, cumulative and monthly charts, an outcome donut, a GitHub-style yearly heatmap, and a game type comparison.
+- **Daily puzzle**: a new probability challenge every day, generated from the UTC date, so everyone gets the same puzzle and refreshing never changes it.
+  - It rotates through preflop, flop and turn situations with two or three players, filtered so no hand is a lock.
+  - You predict each player's share of the pot with linked sliders, then see the exact answer, your accuracy, a plain-English explanation (including the exact river cards that change the winner), and can deal out random run-outs on an animated table.
+  - It tracks your streak, average accuracy, best prediction and history.
+- **Poker table**: a reusable oval table with 2–6 seats, a dealer button, a dealing animation, and winning-hand highlights.
 - **Rules guide**: nine short lessons, from the deck to showdown, kickers and outs. Mark lessons complete; progress is saved and shown on Learn and Profile. Interactive examples include a deal you can step through street by street, a six-seat table that shows how the button and blinds move, showdowns you reveal, and an outs calculator.
 - **Glossary**: 53 terms with examples and cross-linked related terms. Search covers names, aliases ("UTG", "OESD") and definitions, and lessons link straight to each entry.
 - **Hand rankings**: all ten hands with real card examples, tie-break rules and how often each occurs.
@@ -58,6 +63,7 @@ src/
   domain/       session validation and analytics: pure, unit-tested
   poker/        cards, hand evaluator, exact equity engine, hand-ranking content
   learn/        lessons, glossary and probability math; every example is checked by tests
+  puzzle/       daily puzzle generator (seeded by UTC date), scoring, streaks, explanations
   data/         storage interface, localStorage implementation, demo data
   state/        React providers: settings, sessions, toast, add/edit form
   components/   UI building blocks, charts, heatmap, calendar, app shell
@@ -88,8 +94,8 @@ Then open http://localhost:5173.
 - [x] Phase 2: Session tracker, dashboard, history, local storage
 - [x] Phase 3: Analytics (cumulative, monthly, outcomes, heatmap, game types)
 - [x] Phase 4: Hand rankings, rules guide, glossary
-- [ ] Phase 5: ~~Hand evaluator, exact equity engine, hand comparison tool~~ ✓, animated oval poker table
-- [ ] Phase 6: Daily probability puzzle
+- [x] Phase 5: Hand evaluator, exact equity engine, hand comparison tool, animated poker table
+- [x] Phase 6: Daily probability puzzle
 - [ ] Phase 7: Knowledge quizzes and achievements
 - [ ] Phase 8: Year in Review
 - [x] Phase 9: Final branding: Riverline name, Breakout Spade logo, icons, splash

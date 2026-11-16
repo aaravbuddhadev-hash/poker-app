@@ -1,6 +1,6 @@
 import { HashRouter, Navigate, Route, Routes } from 'react-router'
 import { AppShell } from './components/AppShell'
-import { ComingSoonPage } from './pages/ComingSoonPage'
+import { DailyPuzzlePage } from './pages/DailyPuzzlePage'
 import { HomePage } from './pages/HomePage'
 import { GlossaryPage } from './pages/learn/GlossaryPage'
 import { HandRankingsPage } from './pages/learn/HandRankingsPage'
@@ -29,22 +29,7 @@ export default function App() {
                 <Route element={<AppShell />}>
                   <Route index element={<HomePage />} />
                   <Route path="sessions" element={<SessionsPage />} />
-                  <Route
-                    path="puzzle"
-                    element={
-                      <ComingSoonPage
-                        title="Daily Puzzle"
-                        phase="Phases 5–6"
-                        intro="A new Texas Hold'em probability challenge every day, the same for everyone. Every answer comes from an exact hand-evaluation engine; no probability is made up or hard-coded."
-                        items={[
-                          'An animated virtual poker table with realistic cards',
-                          "Predict each player's chance to win with a slider, then see the exact answer",
-                          'Ties and split pots counted correctly, using exact counts wherever practical',
-                          'Streaks, average accuracy, best prediction and puzzle history',
-                        ]}
-                      />
-                    }
-                  />
+                  <Route path="puzzle" element={<DailyPuzzlePage />} />
                   <Route path="learn" element={<LearnPage />} />
                   <Route path="learn/hand-rankings" element={<HandRankingsPage />} />
                   <Route path="learn/odds" element={<OddsCalculatorPage />} />

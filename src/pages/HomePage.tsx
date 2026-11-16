@@ -2,6 +2,7 @@ import { motion } from 'motion/react'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router'
 import { CumulativeChart } from '../components/charts'
+import { DailyPuzzlePreview } from '../components/DailyPuzzlePreview'
 import { PlusIcon } from '../components/icons'
 import { SessionCard } from '../components/SessionCard'
 import { Button, Card, EmptyState, MoneyText, Segmented, StatTile } from '../components/ui'
@@ -137,26 +138,7 @@ export function HomePage() {
             ))}
           </div>
         </Card>
-        <Card title="Daily puzzle">
-          <div className="grid gap-3">
-            <div className="flex gap-2" aria-hidden>
-              {['A♠', 'A♥', 'K♠', 'K♥'].map((card, i) => (
-                <span
-                  key={card}
-                  className={`grid h-16 w-11 place-items-center rounded-lg border border-line bg-white font-bold shadow ${card.includes('♥') ? 'text-red-600' : 'text-neutral-900'} ${i === 2 ? 'ml-3' : ''}`}
-                >
-                  {card}
-                </span>
-              ))}
-            </div>
-            <p className="text-sm text-muted">
-              A new probability challenge every day: guess each hand's chance to win, then see the exact answer. Arrives with the poker engine in Phase 6.
-            </p>
-            <Link to="/puzzle" className="text-sm font-semibold text-emerald hover:underline">
-              See what's planned
-            </Link>
-          </div>
-        </Card>
+        <DailyPuzzlePreview />
       </div>
     </div>
   )
