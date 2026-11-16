@@ -17,6 +17,8 @@ Brand guide, logos and icons: [`branding/BRAND.md`](branding/BRAND.md).
 - **History**: search notes, filter by date range, game type and result, and sort four ways.
 - **Calendar**: a month view colored by daily result, where you can add a session for any day.
 - **Analytics**: personal records, cumulative and monthly charts, an outcome donut, a GitHub-style yearly heatmap, and a game type comparison.
+- **Hand rankings**: all ten hands with real card examples, tie-break rules and how often each occurs.
+- **Odds calculator**: pick hands for 2–6 players and any board. It gives exact win/split odds by checking every possible remaining board (heads-up preflop is all 1,712,304), names each player's current hand, and explains the winner at showdown. It runs in a Web Worker so the page stays responsive.
 - **Demo mode**: fictional, clearly labeled data, stored separately from your real records.
 - **Settings**: currency, dark and light themes, CSV export, and delete all.
 - Responsive layout: bottom navigation on phones and a sidebar on desktop.
@@ -35,6 +37,11 @@ Brand guide, logos and icons: [`branding/BRAND.md`](branding/BRAND.md).
 ## Design decisions
 
 - **Money is stored as integer cents.** Amounts are parsed from the typed digits, never by multiplying floats, so totals can't drift (`0.1 + 0.2` problems are impossible). Formatting to a currency happens only for display.
+- **The poker engine is exact and verified.** Cards are integers, and a bit-mask hand evaluator scores any 5–7 cards. The tests prove it by:
+  - counting all 2,598,960 five-card hands and matching the textbook total for every category (including exactly 4 royal flushes);
+  - agreeing with a separate, deliberately simple evaluator on 20,000 random 7-card hands;
+  - matching odds scenarios small enough to count by hand.
+  Odds are never hard-coded or sampled.
 - **Calculation logic is pure and separate from the UI.** `src/domain/analytics.ts` has no React or storage code, so every number on screen is unit-tested.
 - **One source for the brand.** The logo, icons and social card are generated from a single definition of the mark and palette (`branding/tools`), so every asset matches.
 - **Storage sits behind an interface.** `SessionRepository` is implemented with `localStorage` today. A cloud version (for example Supabase with row-level security, for accounts and multi-device sync) can replace it without touching any screen.
@@ -47,6 +54,7 @@ Brand guide, logos and icons: [`branding/BRAND.md`](branding/BRAND.md).
 src/
   lib/          money (cents), dates, CSV: pure helpers
   domain/       session validation and analytics: pure, unit-tested
+  poker/        cards, hand evaluator, exact equity engine, hand-ranking content
   data/         storage interface, localStorage implementation, demo data
   state/        React providers: settings, sessions, toast, add/edit form
   components/   UI building blocks, charts, heatmap, calendar, app shell
@@ -76,8 +84,8 @@ Then open http://localhost:5173.
 - [x] Phase 1: Architecture plan and branding concepts
 - [x] Phase 2: Session tracker, dashboard, history, local storage
 - [x] Phase 3: Analytics (cumulative, monthly, outcomes, heatmap, game types)
-- [ ] Phase 4: Hand rankings, rules guide, glossary
-- [ ] Phase 5: Hand evaluator, exact equity engine, virtual poker table
+- [ ] Phase 4: ~~Hand rankings~~ ✓, rules guide, glossary
+- [ ] Phase 5: ~~Hand evaluator, exact equity engine, hand comparison tool~~ ✓, animated oval poker table
 - [ ] Phase 6: Daily probability puzzle
 - [ ] Phase 7: Knowledge quizzes and achievements
 - [ ] Phase 8: Year in Review

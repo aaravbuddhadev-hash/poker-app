@@ -2,6 +2,9 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router'
 import { AppShell } from './components/AppShell'
 import { ComingSoonPage } from './pages/ComingSoonPage'
 import { HomePage } from './pages/HomePage'
+import { HandRankingsPage } from './pages/learn/HandRankingsPage'
+import { LearnPage } from './pages/learn/LearnPage'
+import { OddsCalculatorPage } from './pages/learn/OddsCalculatorPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { SessionsPage } from './pages/SessionsPage'
 import { SessionFormProvider } from './state/SessionFormProvider'
@@ -37,23 +40,9 @@ export default function App() {
                       />
                     }
                   />
-                  <Route
-                    path="learn"
-                    element={
-                      <ComingSoonPage
-                        title="Learn"
-                        phase="Phases 4, 5 and 7"
-                        intro="Everything you need to learn Texas Hold'em, built on the same card table and poker engine as the daily puzzle."
-                        items={[
-                          'All ten hand rankings with real card examples and tie-break rules',
-                          'A step-by-step rules guide with lessons you can mark complete',
-                          'A searchable poker glossary',
-                          'Hand comparison tool with exact win, lose and tie odds',
-                          'Quizzes by category and difficulty, with a review of missed questions',
-                        ]}
-                      />
-                    }
-                  />
+                  <Route path="learn" element={<LearnPage />} />
+                  <Route path="learn/hand-rankings" element={<HandRankingsPage />} />
+                  <Route path="learn/odds" element={<OddsCalculatorPage />} />
                   <Route path="profile" element={<ProfilePage />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Route>
