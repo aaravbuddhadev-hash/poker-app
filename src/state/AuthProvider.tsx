@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { AUTH_STORAGE_KEY, cloudEnabled, getClient } from '../cloud/supabase'
+import { isNativeApp } from '../native/native'
 import { accountKeyPrefix, storageKeys, type StorageKeys } from '../data/progressStorage'
 
 export interface AccountUser {
@@ -28,9 +29,16 @@ interface AuthValue {
 
 const AuthContext = createContext<AuthValue | null>(null)
 
-/** Where email links (confirm, reset password) send people back to: this app's own address. */
+const WEBSITE = 'https://aaravbuddhadev-hash.github.io/poker-app/'
+
+/**
+ * Where email links (confirm, reset password) send people back to: this
+ * site's own address. Inside the iOS app that address (capacitor://localhost)
+ * means nothing to a mail app, so links go to the website instead; the new
+ * password then works in the app too.
+ */
 function returnUrl() {
-  return `${window.location.origin}${window.location.pathname}`
+  return isNativeApp ? WEBSITE : `${window.location.origin}${window.location.pathname}`
 }
 
 /** Turn Supabase's error messages into plain, helpful ones. */

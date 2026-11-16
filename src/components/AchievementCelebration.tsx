@@ -2,6 +2,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useEffect } from 'react'
 import type { AchievementStatus } from '../achievements/achievements'
 import { AchievementGlyph } from './AchievementBadge'
+import { haptic } from '../native/native'
 
 const SHOW_MS = 4600
 const SPARKS = 12
@@ -32,6 +33,7 @@ export function AchievementCelebration({ queue, onDone }: { queue: AchievementSt
 
 function Celebration({ a, onDismiss, more }: { a: AchievementStatus; onDismiss: () => void; more: number }) {
   const reduce = useReducedMotion()
+  useEffect(() => haptic('success'), [])
 
   return (
     <motion.button

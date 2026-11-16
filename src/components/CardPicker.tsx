@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { cardName, makeCard, RANK_CHARS, SUIT_SYMBOLS, type Card } from '../poker/cards'
 import { cx } from './ui'
+import { haptic } from '../native/native'
 
 const SUIT_ORDER = [3, 2, 1, 0] // spades, hearts, diamonds, clubs
 const SUIT_NAMES = ['clubs', 'diamonds', 'hearts', 'spades']
@@ -87,7 +88,10 @@ function CardButton({
     <button
       type="button"
       disabled={isUsed || disabled}
-      onClick={() => onPick(card)}
+      onClick={() => {
+        haptic('selection')
+        onPick(card)
+      }}
       className={cx(
         'grid min-w-0 place-items-center rounded-md border font-bold leading-[1.05] transition',
         size === 'lg' ? 'h-14 text-base' : 'h-12 text-sm',

@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { getBrowserStore } from '../data/sessionRepository'
 import { isCurrencyCode, type CurrencyCode } from '../lib/money'
+import { setStatusBarTheme } from '../native/native'
 
 export type Theme = 'dark' | 'light'
 
@@ -43,6 +44,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.dataset.theme = settings.theme
+    void setStatusBarTheme(settings.theme)
     document
       .querySelector('meta[name="theme-color"]')
       ?.setAttribute('content', settings.theme === 'dark' ? '#0F1412' : '#F6F2E8')

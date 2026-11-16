@@ -54,8 +54,8 @@
   --color-neg: var(--neg);
   --color-even: var(--even);
   --color-on-accent: var(--on-accent);
-  --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Manrope Variable', 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Fraunces Variable', 'Fraunces', Georgia, 'Times New Roman', serif;
 }
 
 html,

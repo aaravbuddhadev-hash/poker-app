@@ -15,17 +15,7 @@ import { CURRENCIES, type CurrencyCode } from '../lib/money'
 import { useSessions } from '../state/SessionsProvider'
 import { useSettings } from '../state/SettingsProvider'
 import { useToast } from '../state/ToastProvider'
-
-function download(filename: string, text: string) {
-  const url = URL.createObjectURL(new Blob([text], { type: 'text/csv;charset=utf-8' }))
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-  document.body.append(a)
-  a.click()
-  a.remove()
-  setTimeout(() => URL.revokeObjectURL(url), 1000)
-}
+import { saveOrShareFile } from '../native/native'
 
 export function ProfilePage() {
   const { sessions, isDemo, clearAll, today, loading } = useSessions()
@@ -158,8 +148,11 @@ export function ProfilePage() {
             <Button
               disabled={sessions.length === 0}
               onClick={() => {
-                download(`${isDemo ? 'riverline-demo-sessions' : 'riverline-sessions'}-${today}.csv`, sessionsToCsv(sessions))
-                toast(`Exported ${sessions.length} sessions`)
+                const csv = new Blob([sessionsToCsv(sessions)], { type: 'text/csv;charset=utf-8' })
+                // A download on the website; the share sheet (Save to Files, AirDrop…) in the iOS app.
+                void saveOrShareFile(csv, `${isDemo ? 'riverline-demo-sessions' : 'riverline-sessions'}-${today}.csv`, { title: 'Riverline sessions' }).then((outcome) => {
+                  if (outcome !== 'cancelled') toast(`Exported ${sessions.length} sessions`)
+                })
               }}
             >
               <DownloadIcon width={18} height={18} /> Export CSV
@@ -202,6 +195,36 @@ export function ProfilePage() {
       </Card>
 
       <AccountCard />
+
+      <Card title="Play responsibly">
+        <div className="grid gap-2 text-sm">
+          <p className="max-w-prose text-muted">
+            Riverline is for keeping records and learning; it never handles money. If gambling stops being fun or starts causing problems, help is free
+            and confidential.
+          </p>
+          <div className="flex flex-wrap gap-x-4 gap-y-1">
+            <a href="tel:18004262537" className="font-semibold text-emerald hover:underline">
+              Call or text 1-800-GAMBLER (US)
+            </a>
+            <a href="https://www.gamblingtherapy.org" target="_blank" rel="noreferrer" className="font-semibold text-emerald hover:underline">
+              Gambling Therapy (worldwide)
+            </a>
+          </div>
+        </div>
+      </Card>
+
+      <nav aria-label="About Riverline" className="flex flex-wrap justify-center gap-x-5 gap-y-1 pb-2 text-xs text-muted">
+        {/* Full addresses so the iOS app opens them in Safari rather than in place of the app. */}
+        {[
+          ['Privacy Policy', 'privacy'],
+          ['Terms of Use', 'terms'],
+          ['Support', 'support'],
+        ].map(([label, slug]) => (
+          <a key={slug} href={`https://aaravbuddhadev-hash.github.io/poker-app/${slug}.html`} target="_blank" rel="noreferrer" className="hover:text-fg hover:underline">
+            {label}
+          </a>
+        ))}
+      </nav>
     </div>
   )
 }

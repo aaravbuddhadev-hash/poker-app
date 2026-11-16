@@ -1,3 +1,4 @@
+import { saveOrShareFile } from '../native/native'
 /**
  * Draws the shareable Year in Review card (1080 x 1350 PNG) on a canvas.
  * Text comes from summaryLines(), which already leaves out money when the
@@ -9,8 +10,8 @@ import type { Recap, SummaryLine } from './yearInReview'
 const W = 1080
 const H = 1350
 const C = { charcoal: '#0F1412', felt: '#123D2D', emerald: '#1FA971', gold: '#D4B062', cream: '#EDE7D6', muted: '#A9B5AE' }
-const DISPLAY = '"Fraunces", Georgia, serif'
-const BODY = '"Manrope", system-ui, sans-serif'
+const DISPLAY = '"Fraunces Variable", Georgia, serif'
+const BODY = '"Manrope Variable", system-ui, sans-serif'
 
 function drawMark(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
   // Build the mark on its own canvas so the cut-out line can erase the spade.
@@ -102,28 +103,12 @@ export async function renderRecapCard(r: Recap, lines: SummaryLine[], opts: { is
   return new Promise((resolve, reject) => canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('Could not create the image'))), 'image/png'))
 }
 
-export function downloadBlob(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-  document.body.append(a)
-  a.click()
-  a.remove()
-  setTimeout(() => URL.revokeObjectURL(url), 1000)
+/** Save the image: a download on the website, the share sheet (Save Image, Files…) in the iOS app. */
+export function saveImage(blob: Blob, filename: string) {
+  return saveOrShareFile(blob, filename, { title: 'My Riverline Year in Review' })
 }
 
-/** Share through the system share sheet when it supports images; otherwise download. */
-export async function shareOrDownload(blob: Blob, filename: string, text: string): Promise<'shared' | 'downloaded' | 'cancelled'> {
-  const file = new File([blob], filename, { type: 'image/png' })
-  if (typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] })) {
-    try {
-      await navigator.share({ files: [file], title: 'My Riverline Year in Review', text })
-      return 'shared'
-    } catch {
-      return 'cancelled'
-    }
-  }
-  downloadBlob(blob, filename)
-  return 'downloaded'
+/** Share through the system share sheet when there is one; otherwise download. */
+export function shareImage(blob: Blob, filename: string, text: string) {
+  return saveOrShareFile(blob, filename, { title: 'My Riverline Year in Review', text, preferShare: true })
 }

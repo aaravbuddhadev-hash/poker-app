@@ -7,7 +7,7 @@ import { cx, PageLoading } from '../components/ui'
 import { LESSONS } from '../learn/lessons'
 import { formatDate, formatDuration, formatMonth } from '../lib/dates'
 import { formatMoney, type CurrencyCode } from '../lib/money'
-import { downloadBlob, renderRecapCard, shareOrDownload } from '../recap/exportCard'
+import { renderRecapCard, saveImage, shareImage } from '../recap/exportCard'
 import { buildRecap, recapYears, summaryLines, type Recap } from '../recap/yearInReview'
 import { useLearning } from '../state/LearningProvider'
 import { useProgress } from '../state/ProgressProvider'
@@ -310,12 +310,8 @@ export function YearInReviewPage() {
     setBusy(true)
     try {
       const blob = await renderRecapCard(recap, lines, { isDemo, hideAmounts: hide })
-      if (!share) {
-        downloadBlob(blob, filename)
-        toast('Recap image saved')
-      } else if ((await shareOrDownload(blob, filename, shareText)) === 'downloaded') {
-        toast('Sharing isn’t available in this browser, so the image was saved instead')
-      }
+      const outcome = share ? await shareImage(blob, filename, shareText) : await saveImage(blob, filename)
+      if (outcome === 'downloaded') toast(share ? 'Sharing isn’t available in this browser, so the image was saved instead' : 'Recap image saved')
     } catch {
       toast('Couldn’t create the image. Try again.', 'error')
     } finally {

@@ -16,6 +16,7 @@ import { syncProgress, type ProgressRemote } from '../sync/progressSync'
 import { useAuth, useStorageKeys } from './AuthProvider'
 import { useSettings } from './SettingsProvider'
 import { useToast } from './ToastProvider'
+import { haptic } from '../native/native'
 
 type SaveResult = { ok: true; session: Session } | { ok: false; errors: SessionErrors }
 
@@ -229,6 +230,7 @@ export function SessionsProvider({ children }: { children: ReactNode }) {
         const session = await repo.create(v.value)
         await refresh()
         scheduleSync()
+        haptic('success')
         toast('Session saved')
         return { ok: true, session }
       } catch {
@@ -247,6 +249,7 @@ export function SessionsProvider({ children }: { children: ReactNode }) {
         const session = await repo.update(id, v.value)
         await refresh()
         scheduleSync()
+        haptic('success')
         toast('Session updated')
         return { ok: true, session }
       } catch {

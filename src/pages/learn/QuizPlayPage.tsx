@@ -7,6 +7,7 @@ import { Button, cx } from '../../components/ui'
 import { buildQuiz, QUIZ_LENGTH, type QuizMode } from '../../quiz/build'
 import { CATEGORIES, DIFFICULTIES, isCorrect, type Difficulty, type Question, type Response } from '../../quiz/types'
 import { useProgress } from '../../state/ProgressProvider'
+import { haptic } from '../../native/native'
 
 const MODES = new Set<string>(['mixed', ...CATEGORIES.map((c) => c.id)])
 
@@ -46,6 +47,7 @@ function QuizRound({ review, mode, level, onAgain }: { review: boolean; mode: Qu
   const correctCount = responses.filter((r, i) => r && isCorrect(questions[i], r)).length
 
   function submit(r: Response) {
+    haptic(isCorrect(questions[index], r) ? 'success' : 'error')
     setResponses((rs) => rs.map((x, i) => (i === index ? r : x)))
   }
 

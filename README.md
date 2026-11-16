@@ -128,7 +128,11 @@ The app runs fine without a backend: everything stays on the device. To switch o
 | `npm run build` | Type-check and build for production |
 | `npm run lint` | Lint with oxlint |
 | `npm run deploy` | Test, build and publish to GitHub Pages |
+| `npm run ios:sync` | Build and copy the app into the iOS project |
+| `npm run ios:open` | Open the iOS project in Xcode |
 | `npm run deploy` | Test, build and publish to GitHub Pages |
+| `npm run ios:sync` | Build and copy the app into the iOS project |
+| `npm run ios:open` | Open the iOS project in Xcode |
 
 ## Roadmap
 
@@ -142,3 +146,4 @@ The app runs fine without a backend: everything stays on the device. To switch o
 - [x] Phase 8: Year in Review
 - [x] Phase 9: Final branding: Riverline name, Breakout Spade logo, icons, splash
 - [ ] Phase 10: ~~Deployment (GitHub Pages)~~ ✓, ~~accounts and cloud sync~~ ✓, polish
+- [ ] iOS App Store release: see the step-by-step plan in [`docs/APP_STORE_RELEASE.md`](docs/APP_STORE_RELEASE.md)

@@ -11,6 +11,7 @@ import { accuracy, evenSplit, puzzleStats, rebalance, type Submission } from '..
 import { useAuth } from '../state/AuthProvider'
 import { useEquity } from '../state/useEquity'
 import { usePuzzleHistory } from '../state/usePuzzleHistory'
+import { haptic } from '../native/native'
 
 const PLAYER_COLORS = ['#3DD68C', '#D4B062', '#6EA8FE']
 const pct = (x: number, d = 1) => `${(x * 100).toFixed(d)}%`
@@ -58,6 +59,7 @@ export function DailyPuzzlePage() {
 
   function submit() {
     if (!result) return
+    haptic('medium')
     const eq = result.players.map((p) => p.equity)
     save(today, {
       kind: puzzle.kind,
