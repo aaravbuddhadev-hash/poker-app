@@ -2,7 +2,11 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router'
 import { AppShell } from './components/AppShell'
 import { ComingSoonPage } from './pages/ComingSoonPage'
 import { HomePage } from './pages/HomePage'
+import { GlossaryPage } from './pages/learn/GlossaryPage'
 import { HandRankingsPage } from './pages/learn/HandRankingsPage'
+import { LessonPage } from './pages/learn/LessonPage'
+import { RulesGuidePage } from './pages/learn/RulesGuidePage'
+import { LearningProvider } from './state/LearningProvider'
 import { LearnPage } from './pages/learn/LearnPage'
 import { OddsCalculatorPage } from './pages/learn/OddsCalculatorPage'
 import { ProfilePage } from './pages/ProfilePage'
@@ -17,6 +21,7 @@ export default function App() {
     <SettingsProvider>
       <ToastProvider>
         <SessionsProvider>
+          <LearningProvider>
           <SessionFormProvider>
             {/* Hash routing works on any static host, including GitHub Pages. */}
             <HashRouter>
@@ -43,12 +48,16 @@ export default function App() {
                   <Route path="learn" element={<LearnPage />} />
                   <Route path="learn/hand-rankings" element={<HandRankingsPage />} />
                   <Route path="learn/odds" element={<OddsCalculatorPage />} />
+                  <Route path="learn/rules" element={<RulesGuidePage />} />
+                  <Route path="learn/rules/:lessonId" element={<LessonPage />} />
+                  <Route path="learn/glossary" element={<GlossaryPage />} />
                   <Route path="profile" element={<ProfilePage />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Route>
               </Routes>
             </HashRouter>
           </SessionFormProvider>
+          </LearningProvider>
         </SessionsProvider>
       </ToastProvider>
     </SettingsProvider>

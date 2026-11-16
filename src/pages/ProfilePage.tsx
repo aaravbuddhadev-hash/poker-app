@@ -1,5 +1,8 @@
 import { useState } from 'react'
+import { Link } from 'react-router'
 import { DownloadIcon } from '../components/icons'
+import { LESSONS } from '../learn/lessons'
+import { useLearning } from '../state/LearningProvider'
 import { Button, Card, inputCls, MoneyText, PageHeader, Segmented, StatTile } from '../components/ui'
 import { summarize } from '../domain/analytics'
 import { sessionsToCsv } from '../lib/csv'
@@ -25,6 +28,8 @@ export function ProfilePage() {
   const toast = useToast()
   const [confirmClear, setConfirmClear] = useState(false)
   const summary = summarize(sessions)
+  const { completed } = useLearning()
+  const lessonsDone = LESSONS.filter((l) => completed.has(l.id)).length
 
   return (
     <div className="grid gap-5">
@@ -36,6 +41,22 @@ export function ProfilePage() {
         <StatTile label="Hours recorded" value={(summary.totalMinutes / 60).toFixed(1)} />
         <StatTile label="Positive rate" value={summary.positiveRate === null ? '—' : `${Math.round(summary.positiveRate * 100)}%`} />
       </div>
+
+      <Card title="Learning">
+        <div className="grid gap-3">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <span className="text-sm">
+              <strong className="font-display text-xl">{lessonsDone}</strong> of {LESSONS.length} rules lessons complete
+            </span>
+            <Link to="/learn/rules" className="text-sm font-semibold text-emerald hover:underline">
+              {lessonsDone === LESSONS.length ? 'Review lessons' : 'Keep learning'} →
+            </Link>
+          </div>
+          <div className="h-2 overflow-hidden rounded-full bg-surface-2" role="progressbar" aria-label="Rules lessons complete" aria-valuemin={0} aria-valuemax={LESSONS.length} aria-valuenow={lessonsDone}>
+            <div className="h-full rounded-full bg-emerald" style={{ width: `${(lessonsDone / LESSONS.length) * 100}%` }} />
+          </div>
+        </div>
+      </Card>
 
       <Card title="Settings">
         <div className="grid gap-5">
