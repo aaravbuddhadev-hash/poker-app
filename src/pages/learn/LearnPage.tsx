@@ -5,9 +5,11 @@ import { GLOSSARY } from '../../learn/glossary'
 import { LESSONS } from '../../learn/lessons'
 import { parseCards } from '../../poker/cards'
 import { useLearning } from '../../state/LearningProvider'
+import { useProgress } from '../../state/ProgressProvider'
 
 export function LearnPage() {
   const { completed } = useLearning()
+  const { quiz } = useProgress()
   const done = LESSONS.filter((l) => completed.has(l.id)).length
   const next = LESSONS.find((l) => !completed.has(l.id))
 
@@ -76,10 +78,16 @@ export function LearnPage() {
         </Link>
       </div>
 
-      <section className="grid gap-2 rounded-2xl border border-dashed border-line p-4">
-        <span className="text-sm font-semibold">Coming next: quizzes</span>
-        <span className="text-xs text-muted">Hand rankings, who wins, tie-breakers and odds, from beginner to advanced.</span>
-      </section>
+      <Link to="/learn/quizzes" className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-surface p-5 transition-colors hover:border-emerald/60">
+        <span className="grid gap-1">
+          <h2 className="font-display text-lg font-bold">Quizzes</h2>
+          <span className="text-sm text-muted">
+            Hand rankings, who wins, tie-breakers, rules, terms and odds, from beginner to advanced.
+            {quiz.completed > 0 && ` ${quiz.completed} completed · ${Math.round((quiz.accuracy ?? 0) * 100)}% accuracy.`}
+          </span>
+        </span>
+        <span className="text-sm font-semibold text-emerald">Take a quiz →</span>
+      </Link>
     </div>
   )
 }

@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { Link } from 'react-router'
 import { DownloadIcon } from '../components/icons'
 import { LESSONS } from '../learn/lessons'
+import { AchievementBadge } from '../components/AchievementBadge'
 import { useLearning } from '../state/LearningProvider'
+import { useProgress } from '../state/ProgressProvider'
 import { Button, Card, inputCls, MoneyText, PageHeader, Segmented, StatTile } from '../components/ui'
 import { summarize } from '../domain/analytics'
 import { sessionsToCsv } from '../lib/csv'
@@ -29,6 +31,7 @@ export function ProfilePage() {
   const [confirmClear, setConfirmClear] = useState(false)
   const summary = summarize(sessions)
   const { completed } = useLearning()
+  const { quiz, achievements } = useProgress()
   const lessonsDone = LESSONS.filter((l) => completed.has(l.id)).length
 
   return (
@@ -55,6 +58,20 @@ export function ProfilePage() {
           <div className="h-2 overflow-hidden rounded-full bg-surface-2" role="progressbar" aria-label="Rules lessons complete" aria-valuemin={0} aria-valuemax={LESSONS.length} aria-valuenow={lessonsDone}>
             <div className="h-full rounded-full bg-emerald" style={{ width: `${(lessonsDone / LESSONS.length) * 100}%` }} />
           </div>
+          <span className="text-sm text-muted">
+            Quizzes: {quiz.completed} completed
+            {quiz.accuracy !== null && ` · ${Math.round(quiz.accuracy * 100)}% of ${quiz.answered} answers right`}
+            {quiz.best && ` · best ${quiz.best.correct}/${quiz.best.total}`}
+          </span>
+        </div>
+      </Card>
+
+      <Card title={`Achievements · ${achievements.filter((a) => a.unlocked).length} of ${achievements.length}`}>
+        {/* 10 badges: 2 or 5 columns so every row is full. */}
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
+          {achievements.map((a) => (
+            <AchievementBadge key={a.id} a={a} />
+          ))}
         </div>
       </Card>
 

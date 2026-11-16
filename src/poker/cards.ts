@@ -73,9 +73,9 @@ export function remainingDeck(used: Iterable<Card>): Card[] {
   return fullDeck().filter((c) => !u.has(c))
 }
 
-/** Fisher–Yates shuffle with crypto randomness when available. */
-export function shuffled(cards: readonly Card[], random: () => number = cryptoRandom): Card[] {
-  const a = [...cards]
+/** Fisher–Yates shuffle (any items) with crypto randomness when available. */
+export function shuffled<T>(items: readonly T[], random: () => number = cryptoRandom): T[] {
+  const a = [...items]
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(random() * (i + 1))
     ;[a[i], a[j]] = [a[j], a[i]]
