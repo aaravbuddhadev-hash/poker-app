@@ -21,6 +21,11 @@ Brand guide, logos and icons: [`branding/BRAND.md`](branding/BRAND.md).
   - It rotates through preflop, flop and turn situations with two or three players, filtered so no hand is a lock.
   - You predict each player's share of the pot with linked sliders, then see the exact answer, your accuracy, a plain-English explanation (including the exact river cards that change the winner), and can deal out random run-outs on an animated table.
   - It tracks your streak, average accuracy, best prediction and history.
+- **Year in Review**: a Spotify Wrapped–style story of your year.
+  - Seven animated full-screen slides: your year, the numbers (animated net result), most active month, session history, biggest session, learning progress, and a one-screen summary.
+  - Slides auto-advance with pause, tap and keyboard navigation, and replay. The current year is labeled "year to date", and previous years are one tap away.
+  - Save the summary card as a PNG or share it. A privacy setting (on by default) leaves every money amount off exported cards.
+  - Slides without enough data are skipped rather than filled with made-up numbers.
 - **Quizzes**: six categories (hand rankings, who wins, tie-breakers, rules, terminology, probability) at three difficulty levels, plus a five-question quick quiz.
   - Question styles: multiple choice, dealt showdowns on the table, picking the strongest hand or the winning river card, and number answers.
   - Hand questions are dealt fresh each time; the evaluator and equity engine compute every answer and explanation, and tests re-check 126 generated quizzes.
@@ -71,6 +76,7 @@ src/
   puzzle/       daily puzzle generator (seeded by UTC date), scoring, streaks, explanations
   quiz/         question bank, engine-based question generators, quiz building and stats
   achievements/ achievement definitions computed from learning progress
+  recap/        Year in Review stats, privacy-aware summary lines, canvas card export
   data/         storage interface, localStorage implementation, demo data
   state/        React providers: settings, sessions, toast, add/edit form
   components/   UI building blocks, charts, heatmap, calendar, app shell
@@ -104,6 +110,6 @@ Then open http://localhost:5173.
 - [x] Phase 5: Hand evaluator, exact equity engine, hand comparison tool, animated poker table
 - [x] Phase 6: Daily probability puzzle
 - [x] Phase 7: Knowledge quizzes and achievements
-- [ ] Phase 8: Year in Review
+- [x] Phase 8: Year in Review
 - [x] Phase 9: Final branding: Riverline name, Breakout Spade logo, icons, splash
 - [ ] Phase 10: Accounts and cloud sync, polish, deployment

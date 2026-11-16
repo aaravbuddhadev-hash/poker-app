@@ -14,6 +14,7 @@ import { LearnPage } from './pages/learn/LearnPage'
 import { OddsCalculatorPage } from './pages/learn/OddsCalculatorPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { SessionsPage } from './pages/SessionsPage'
+import { YearInReviewPage } from './pages/YearInReviewPage'
 import { SessionFormProvider } from './state/SessionFormProvider'
 import { SessionsProvider } from './state/SessionsProvider'
 import { SettingsProvider } from './state/SettingsProvider'
@@ -30,6 +31,8 @@ export default function App() {
             {/* Hash routing works on any static host, including GitHub Pages. */}
             <HashRouter>
               <Routes>
+                {/* Full-screen story, outside the app shell's navigation. */}
+                <Route path="recap/:year" element={<YearInReviewPage />} />
                 <Route element={<AppShell />}>
                   <Route index element={<HomePage />} />
                   <Route path="sessions" element={<SessionsPage />} />

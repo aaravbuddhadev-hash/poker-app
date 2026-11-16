@@ -5,6 +5,7 @@ import { LESSONS } from '../learn/lessons'
 import { AchievementBadge } from '../components/AchievementBadge'
 import { useLearning } from '../state/LearningProvider'
 import { useProgress } from '../state/ProgressProvider'
+import { recapYears } from '../recap/yearInReview'
 import { Button, Card, inputCls, MoneyText, PageHeader, Segmented, StatTile } from '../components/ui'
 import { summarize } from '../domain/analytics'
 import { sessionsToCsv } from '../lib/csv'
@@ -31,7 +32,9 @@ export function ProfilePage() {
   const [confirmClear, setConfirmClear] = useState(false)
   const summary = summarize(sessions)
   const { completed } = useLearning()
-  const { quiz, achievements } = useProgress()
+  const { quiz, achievements, submissions, attempts } = useProgress()
+  const recapYearList = recapYears(today, sessions, submissions, attempts)
+  const thisYear = recapYearList[0]
   const lessonsDone = LESSONS.filter((l) => completed.has(l.id)).length
 
   return (
@@ -44,6 +47,27 @@ export function ProfilePage() {
         <StatTile label="Hours recorded" value={(summary.totalMinutes / 60).toFixed(1)} />
         <StatTile label="Positive rate" value={summary.positiveRate === null ? '—' : `${Math.round(summary.positiveRate * 100)}%`} />
       </div>
+
+      <section className="grid gap-4 rounded-2xl border border-line felt-glow p-5 md:p-6">
+        <div className="grid gap-1">
+          <span className="text-xs font-semibold uppercase tracking-[0.14em] text-gold">Year in Review</span>
+          <h2 className="font-display text-2xl font-bold">Your {thisYear} so far</h2>
+          <p className="text-sm text-muted">
+            A short story of your recorded sessions and what you learned this year, with a card you can save or share.
+            {isDemo && ' Uses demo data while demo mode is on.'}
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link to={`/recap/${thisYear}`} className="inline-flex h-11 items-center rounded-full bg-emerald px-5 text-sm font-semibold text-on-accent hover:brightness-110">
+            Play your {thisYear} recap
+          </Link>
+          {recapYearList.slice(1).map((y) => (
+            <Link key={y} to={`/recap/${y}`} className="inline-flex h-9 items-center rounded-full border border-line bg-surface-2 px-3.5 text-sm font-semibold hover:border-emerald/60">
+              {y}
+            </Link>
+          ))}
+        </div>
+      </section>
 
       <Card title="Learning">
         <div className="grid gap-3">
@@ -107,6 +131,18 @@ export function ProfilePage() {
               className={`relative h-7 w-12 rounded-full transition-colors ${settings.demoMode ? 'bg-gold' : 'bg-surface-2 border border-line'}`}
             >
               <span className={`absolute top-1/2 size-5 -translate-y-1/2 rounded-full bg-white shadow transition-all ${settings.demoMode ? 'left-6' : 'left-1'}`} />
+            </button>
+          </Row>
+          <Row label="Hide amounts in shared recaps" hint="Exported and shared Year in Review cards leave out every money figure. Your screens still show them.">
+            <button
+              type="button"
+              role="switch"
+              aria-checked={settings.hideAmountsInExports}
+              aria-label="Hide amounts in shared recaps"
+              onClick={() => update({ hideAmountsInExports: !settings.hideAmountsInExports })}
+              className={`relative h-7 w-12 rounded-full transition-colors ${settings.hideAmountsInExports ? 'bg-emerald' : 'bg-surface-2 border border-line'}`}
+            >
+              <span className={`absolute top-1/2 size-5 -translate-y-1/2 rounded-full bg-white shadow transition-all ${settings.hideAmountsInExports ? 'left-6' : 'left-1'}`} />
             </button>
           </Row>
         </div>

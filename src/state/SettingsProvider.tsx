@@ -8,10 +8,12 @@ export interface Settings {
   currency: CurrencyCode
   theme: Theme
   demoMode: boolean
+  /** Leave money amounts off exported/shared Year in Review cards. On by default for privacy. */
+  hideAmountsInExports: boolean
 }
 
 export const SETTINGS_KEY = 'river.v1.settings'
-const DEFAULTS: Settings = { currency: 'USD', theme: 'dark', demoMode: false }
+const DEFAULTS: Settings = { currency: 'USD', theme: 'dark', demoMode: false, hideAmountsInExports: true }
 
 function load(): Settings {
   try {
@@ -22,6 +24,7 @@ function load(): Settings {
       currency: isCurrencyCode(p.currency) ? p.currency : DEFAULTS.currency,
       theme: p.theme === 'light' ? 'light' : 'dark',
       demoMode: p.demoMode === true,
+      hideAmountsInExports: p.hideAmountsInExports !== false,
     }
   } catch {
     return DEFAULTS
