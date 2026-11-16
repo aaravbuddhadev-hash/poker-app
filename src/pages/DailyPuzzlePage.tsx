@@ -43,7 +43,8 @@ export function DailyPuzzlePage() {
   const [prediction, setPrediction] = useState<number[]>(() => evenSplit(players))
   const [runout, setRunout] = useState<PokerCard[] | null>(null)
   const [shownDate, setShownDate] = useState(today)
-  const equity = useEquity(puzzle.hands, puzzle.board)
+  const [attempt, setAttempt] = useState(0)
+  const equity = useEquity(puzzle.hands, puzzle.board, attempt)
   const stats = puzzleStats(submissions, today)
 
   // A new UTC day brings a new puzzle: start fresh (adjusting state during render).
@@ -163,9 +164,19 @@ export function DailyPuzzlePage() {
               </div>
             ))}
             <p className="text-xs text-muted">The shares always add up to 100%. Moving one slider rescales the others.</p>
-            <Button variant="primary" className="justify-self-start" disabled={!result} onClick={submit}>
-              {result ? 'Lock in prediction' : 'Preparing the exact answer…'}
-            </Button>
+            {equity.status === 'error' ? (
+              // Without the exact answer there's nothing to score against: say so and offer a retry.
+              <div role="alert" className="grid gap-2 rounded-xl border border-neg/40 bg-neg/10 p-3 text-sm">
+                <span>Couldn’t work out today’s exact answer. {equity.message}</span>
+                <Button size="sm" className="justify-self-start" onClick={() => setAttempt((n) => n + 1)}>
+                  Try again
+                </Button>
+              </div>
+            ) : (
+              <Button variant="primary" className="justify-self-start" disabled={!result} onClick={submit}>
+                {result ? 'Lock in prediction' : 'Preparing the exact answer…'}
+              </Button>
+            )}
             <p className="text-xs text-muted">One answer per day{user ? ', saved to your account.' : ', saved on this device.'}</p>
           </div>
         </Card>

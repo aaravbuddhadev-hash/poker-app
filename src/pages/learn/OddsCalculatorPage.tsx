@@ -33,7 +33,8 @@ export function OddsCalculatorPage() {
   const used = useMemo(() => new Set([...hands.flat(), ...board].filter(notNull)), [hands, board])
   const boardCards = board.filter(notNull)
   const handsComplete = hands.every((h) => h.every(notNull))
-  const equity = useEquity(hands, board)
+  const [attempt, setAttempt] = useState(0)
+  const equity = useEquity(hands, board, attempt)
 
   const order: Slot[] = [
     ...hands.flatMap((_, p) => [0, 1].map((i) => ({ kind: 'hand' as const, p, i }))),
@@ -234,7 +235,12 @@ export function OddsCalculatorPage() {
             {boardCards.length === 4 ? 'river cards' : 'ways to complete the board'}. Split pot chance: {pct(equity.result.splitRate)}.
           </span>
         ) : equity.status === 'error' ? (
-          <span className="text-neg">{equity.message}</span>
+          <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span className="text-neg">{equity.message}</span>
+            <button type="button" onClick={() => setAttempt((n) => n + 1)} className="font-semibold text-emerald hover:underline">
+              Try again
+            </button>
+          </span>
         ) : (
           <span className="text-muted">Give every player two cards to see their odds.</span>
         )}

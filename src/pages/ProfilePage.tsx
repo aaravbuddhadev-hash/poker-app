@@ -28,7 +28,7 @@ function download(filename: string, text: string) {
 }
 
 export function ProfilePage() {
-  const { sessions, isDemo, clearAll, today } = useSessions()
+  const { sessions, isDemo, clearAll, today, loading } = useSessions()
   const { user } = useAuth()
   const { settings, update } = useSettings()
   const toast = useToast()
@@ -45,10 +45,11 @@ export function ProfilePage() {
       <PageHeader title="Profile" subtitle={isDemo ? 'Showing demo data' : user ? user.email : 'Your records and settings'} />
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <StatTile label="Sessions" value={summary.count} />
-        <StatTile label="Lifetime net" value={<MoneyText cents={summary.netCents} />} />
-        <StatTile label="Hours recorded" value={(summary.totalMinutes / 60).toFixed(1)} />
-        <StatTile label="Positive rate" value={summary.positiveRate === null ? '—' : `${Math.round(summary.positiveRate * 100)}%`} />
+        {/* While sessions load, show placeholders rather than a misleading zero. */}
+        <StatTile label="Sessions" value={loading ? <Placeholder /> : summary.count} />
+        <StatTile label="Lifetime net" value={loading ? <Placeholder /> : <MoneyText cents={summary.netCents} />} />
+        <StatTile label="Hours recorded" value={loading ? <Placeholder /> : (summary.totalMinutes / 60).toFixed(1)} />
+        <StatTile label="Positive rate" value={loading ? <Placeholder /> : summary.positiveRate === null ? '—' : `${Math.round(summary.positiveRate * 100)}%`} />
       </div>
 
       <section className="grid gap-4 rounded-2xl border border-line felt-glow p-5 md:p-6">
@@ -203,6 +204,10 @@ export function ProfilePage() {
       <AccountCard />
     </div>
   )
+}
+
+function Placeholder() {
+  return <span className="inline-block h-7 w-16 animate-pulse rounded-lg bg-surface-2" role="status" aria-label="Loading" />
 }
 
 function Row({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {

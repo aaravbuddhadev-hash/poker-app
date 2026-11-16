@@ -4,6 +4,7 @@ import { useSessions } from '../state/SessionsProvider'
 import { useSessionForm } from '../state/SessionFormProvider'
 import { useSettings } from '../state/SettingsProvider'
 import { HomeIcon, LearnIcon, PlusIcon, ProfileIcon, PuzzleIcon, SessionsIcon } from './icons'
+import { ErrorBoundary } from './ErrorBoundary'
 import { Logo } from './Logo'
 import { cx, PageLoading } from './ui'
 
@@ -56,7 +57,10 @@ export function AppShell() {
             </NavLink>
           ))}
         </nav>
-        <p className="mt-auto px-2 text-xs text-muted">For personal records and learning. Riverline never handles money.</p>
+        <div className="mt-auto grid gap-3">
+          <SyncNotice />
+          <p className="px-2 text-xs text-muted">For personal records and learning. Riverline never handles money.</p>
+        </div>
       </aside>
 
       <div className="min-w-0">
@@ -74,13 +78,17 @@ export function AppShell() {
         {/* Mobile top bar */}
         <header className="flex items-center justify-between px-4 pt-[calc(1rem+env(safe-area-inset-top))] md:hidden">
           <Logo size={26} />
+          <SyncNotice />
         </header>
 
         <main className="mx-auto w-full max-w-5xl px-4 pb-32 pt-4 md:px-8 md:pb-12 md:pt-8">
           {/* Screens load on first visit; show a placeholder meanwhile. */}
-          <Suspense fallback={<PageLoading />}>
-            <Outlet />
-          </Suspense>
+          {/* A crash stays inside this screen; moving to another screen starts fresh. */}
+          <ErrorBoundary key={pathname}>
+            <Suspense fallback={<PageLoading />}>
+              <Outlet />
+            </Suspense>
+          </ErrorBoundary>
         </main>
       </div>
 
@@ -104,5 +112,26 @@ export function AppShell() {
         ))}
       </nav>
     </div>
+  )
+}
+
+/**
+ * Shown on every screen only when signed-in changes aren't reaching the cloud,
+ * so a sync problem can't go unnoticed. Links to Profile for details and retry.
+ */
+function SyncNotice() {
+  const { cloud } = useSessions()
+  if (!cloud || (cloud.state !== 'offline' && cloud.state !== 'error')) return null
+  if (cloud.state === 'offline' && cloud.pending === 0) return null // nothing at risk
+  const waiting = cloud.pending > 0 ? `${cloud.pending} change${cloud.pending === 1 ? '' : 's'} waiting` : 'Not synced'
+  return (
+    <NavLink
+      to="/profile"
+      className="inline-flex items-center gap-2 self-start rounded-full border border-line bg-surface-2 px-3 py-1.5 text-xs font-semibold text-muted hover:text-fg"
+      title={cloud.state === 'offline' ? 'You’re offline. Changes are saved on this device and upload when you reconnect.' : 'Couldn’t reach the server. Open Profile to retry.'}
+    >
+      <span aria-hidden className={cx('size-2 rounded-full', cloud.state === 'error' ? 'bg-neg' : 'bg-muted')} />
+      {cloud.state === 'offline' ? `Offline · ${waiting}` : `Sync problem · ${waiting}`}
+    </NavLink>
   )
 }

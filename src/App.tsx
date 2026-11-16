@@ -11,6 +11,7 @@ import { AuthProvider, useAuth } from './state/AuthProvider'
 import { lazy, Suspense, useEffect, type ReactNode } from 'react'
 import { PageLoading } from './components/ui'
 import { NewPasswordDialog } from './components/account/NewPasswordDialog'
+import { ErrorBoundary } from './components/ErrorBoundary'
 
 /**
  * Each screen is its own download, fetched the first time it's opened, so the
@@ -74,6 +75,7 @@ function AccountScope({ children }: { children: ReactNode }) {
 export default function App() {
   usePrefetchPages()
   return (
+    <ErrorBoundary fullScreen>
     <SettingsProvider>
       <ToastProvider>
         <AuthProvider>
@@ -115,5 +117,6 @@ export default function App() {
         </AuthProvider>
       </ToastProvider>
     </SettingsProvider>
+    </ErrorBoundary>
   )
 }

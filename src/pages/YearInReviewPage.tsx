@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react
 import { Link, Navigate, useNavigate, useParams } from 'react-router'
 import { CloseIcon, DownloadIcon } from '../components/icons'
 import { LogoMark } from '../components/Logo'
-import { cx } from '../components/ui'
+import { cx, PageLoading } from '../components/ui'
 import { LESSONS } from '../learn/lessons'
 import { formatDate, formatDuration, formatMonth } from '../lib/dates'
 import { formatMoney, type CurrencyCode } from '../lib/money'
@@ -301,7 +301,7 @@ export function YearInReviewPage() {
   }, [go, navigate])
 
   if (!Number.isInteger(year) || !years.includes(year)) return <Navigate to="/profile" replace />
-  if (loading) return <div className="fixed inset-0 z-50 bg-[#0f1412]" />
+  if (loading) return <PageLoading fullScreen />
 
   const filename = `riverline-${recap.year}${recap.isYearToDate ? '-so-far' : ''}-recap.png`
   const shareText = `My ${recap.year} on Riverline${recap.isYearToDate ? ' (so far)' : ''}: ${lines.map((l) => `${l.label} ${l.value}`).join(' · ')}`

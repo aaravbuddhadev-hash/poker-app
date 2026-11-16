@@ -22,8 +22,9 @@ function parse(key: string) {
  *   for an older board can never be shown next to a newer one.
  * - One worker is reused; it is only restarted to cancel a long calculation.
  */
-export function useEquity(hands: Spot[], board: Spot): EquityState {
-  const key = JSON.stringify({ hands, board })
+export function useEquity(hands: Spot[], board: Spot, attempt = 0): EquityState {
+  // `attempt` changes the key, so bumping it runs the same calculation again.
+  const key = JSON.stringify({ hands, board, attempt })
   const [state, setState] = useState<{ key: string; value: EquityState }>({ key: '', value: { status: 'idle' } })
   const worker = useRef<Worker | null>(null)
   const busy = useRef(false)
@@ -45,7 +46,13 @@ export function useEquity(hands: Spot[], board: Spot): EquityState {
       worker.current.terminate() // cancel the outdated calculation
       worker.current = null
     }
-    worker.current ??= new Worker(new URL('../poker/equity.worker.ts', import.meta.url), { type: 'module' })
+    try {
+      worker.current ??= new Worker(new URL('../poker/equity.worker.ts', import.meta.url), { type: 'module' })
+    } catch {
+      // Very old browsers, or a blocked worker: explain instead of crashing the screen.
+      setState({ key, value: { status: 'error', message: 'This browser couldn’t start the odds calculator. Try an up-to-date browser.' } })
+      return
+    }
     const id = ++requestId.current
     busy.current = true
     const w = worker.current
@@ -61,7 +68,7 @@ export function useEquity(hands: Spot[], board: Spot): EquityState {
     w.onerror = () => {
       busy.current = false
       worker.current = null
-      setState({ key, value: { status: 'error', message: 'The calculation stopped unexpectedly. Change a card to try again.' } })
+      setState({ key, value: { status: 'error', message: 'The calculation stopped unexpectedly.' } })
     }
     w.postMessage({ id, ...input })
   }, [key])
