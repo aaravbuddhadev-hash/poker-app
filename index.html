@@ -2,19 +2,68 @@
 <html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#0E1211" />
-    <meta name="description" content="River: track poker sessions, see your results, and learn Texas Hold'em." />
+    <title>Riverline · Poker Companion</title>
+    <meta name="description" content="Riverline: record your poker sessions, see your results over time, and learn Texas Hold'em." />
+    <meta name="theme-color" content="#0F1412" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <meta property="og:title" content="Riverline" />
+    <meta property="og:description" content="Every session, one line. Record poker sessions, see your results, and learn Texas Hold'em." />
+    <meta property="og:image" content="/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700&display=swap"
     />
-    <title>River · Poker Companion</title>
+
+    <script>
+      // Apply the saved theme before first paint so light-theme users don't see a dark flash.
+      try {
+        var s = JSON.parse(localStorage.getItem('river.v1.settings') || '{}')
+        if (s.theme === 'light') document.documentElement.dataset.theme = 'light'
+      } catch (e) {}
+    </script>
+    <style>
+      /* Splash: shown until React's first render, then faded out by src/main.tsx. */
+      #splash {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(90% 70% at 20% 10%, rgba(31, 169, 113, 0.18), transparent 60%),
+          linear-gradient(160deg, #123d2d, #0f1412 65%);
+        transition: opacity 0.35s ease;
+      }
+      #splash img {
+        width: min(56vw, 260px);
+        height: auto;
+        animation: splash-in 0.5s ease-out both;
+      }
+      #splash .light { display: none; }
+      [data-theme='light'] #splash { background: linear-gradient(160deg, #e3ede5, #f6f2e8 65%); }
+      [data-theme='light'] #splash .dark { display: none; }
+      [data-theme='light'] #splash .light { display: block; }
+      #splash.hide { opacity: 0; pointer-events: none; }
+      @keyframes splash-in { from { opacity: 0; transform: translateY(6px) scale(0.98); } }
+      @media (prefers-reduced-motion: reduce) {
+        #splash, #splash img { animation: none; transition: none; }
+      }
+    </style>
   </head>
   <body>
+    <div id="splash" role="presentation">
+      <img class="dark" src="/brand/logo-dark.svg" alt="" />
+      <img class="light" src="/brand/logo-light.svg" alt="" />
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

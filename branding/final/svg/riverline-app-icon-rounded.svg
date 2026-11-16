@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#123D2D"/><stop offset="1" stop-color="#0F1412"/></linearGradient>
+  <radialGradient id="glow" cx="0.28" cy="0.2" r="0.75"><stop offset="0" stop-color="#1FA971" stop-opacity="0.22"/><stop offset="1" stop-color="#1FA971" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1024" height="1024" rx="228" fill="url(#bg)"/>
+<rect width="1024" height="1024" rx="228" fill="url(#glow)"/>
+<g transform="translate(181.8624 200.9088) scale(5.290666666666667)">
+  <defs>
+    <mask id="m11c" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120"><rect width="120" height="120" fill="#fff"/><polyline points="33,73 46,61 58,68 97,23" fill="none" stroke="#000" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></mask>
+    <mask id="m11o" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120"><rect width="120" height="120" fill="#fff"/><path d="M60 14C44 34 22 44 22 64C22 80 40 86 52 76L48 100H72L68 76C80 86 98 80 98 64C98 44 76 34 60 14Z" fill="#000"/></mask>
+  </defs>
+  <path d="M60 14C44 34 22 44 22 64C22 80 40 86 52 76L48 100H72L68 76C80 86 98 80 98 64C98 44 76 34 60 14Z" fill="#1FA971" mask="url(#m11c)"/>
+  <polyline points="33,73 46,61 58,68 97,23" fill="none" stroke="#D4B062" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" mask="url(#m11o)"/>
+  <circle cx="97" cy="23" r="7.5" fill="#D4B062"/>
+</g>
+</svg>

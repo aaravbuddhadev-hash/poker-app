@@ -1,40 +1,41 @@
 @import 'tailwindcss';
 
 /*
- * Temporary "River" brand, Direction A (Premium Poker): charcoal, emerald felt,
- * gold accents. Values mirror src/components/theme.ts, which charts read.
+ * Riverline brand, Direction A (Premium Poker): charcoal, emerald felt, cream
+ * type, gold used sparingly. See branding/BRAND.md. Values mirror
+ * src/components/theme.ts, which charts read.
  */
 :root,
 [data-theme='dark'] {
   color-scheme: dark;
-  --bg: #0e1211;
-  --surface: #161c1a;
-  --surface-2: #1d2522;
-  --line: #27322e;
-  --fg: #e8ece9;
-  --muted: #94a39c;
+  --bg: #0f1412;
+  --surface: #161d1a;
+  --surface-2: #1c2521;
+  --line: #26312c;
+  --fg: #ede7d6;
+  --muted: #9ea89f;
   --emerald: #1fa971;
   --felt: #123d2d;
   --gold: #d4b062;
   --pos: #3dd68c;
   --neg: #f0675d;
-  --even: #8c9a94;
-  --on-accent: #06120d;
+  --even: #8f9a92;
+  --on-accent: #07130e;
 }
 
 [data-theme='light'] {
   color-scheme: light;
-  --bg: #f5f3ee;
-  --surface: #ffffff;
-  --surface-2: #eeece6;
-  --line: #dedbd2;
-  --fg: #141816;
-  --muted: #5b6761;
-  --emerald: #0f7a52;
-  --felt: #e1eee6;
-  --gold: #8f6e24;
-  --pos: #0f8050;
-  --neg: #c0392b;
+  --bg: #f6f2e8;
+  --surface: #fffdf8;
+  --surface-2: #eee9dc;
+  --line: #ddd6c6;
+  --fg: #0f1412;
+  --muted: #5c665f;
+  --emerald: #0f6b4a;
+  --felt: #e3ede5;
+  --gold: #8a6a22;
+  --pos: #0f7a4c;
+  --neg: #b93a2e;
   --even: #6b7570;
   --on-accent: #ffffff;
 }

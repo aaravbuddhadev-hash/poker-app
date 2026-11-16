@@ -1,10 +1,14 @@
-# River · Poker Companion
+<p align="center">
+  <img src="branding/final/png/riverline-social-card-1200x630.png" alt="Riverline: Every session, one line." width="720" />
+</p>
 
-> Working name. Final branding is pending; see [`branding/concepts.html`](branding/concepts.html).
+# Riverline · Poker Companion
 
 A poker companion web app for **recording your own session results** and **learning Texas Hold'em**. Track your lifetime net, see your trends in charts, and (coming soon) practice probability with a daily puzzle on a virtual poker table.
 
-River is for personal recordkeeping and education only. It never handles money, wagers or payments.
+Riverline is for personal recordkeeping and education only. It never handles money, wagers or payments.
+
+Brand guide, logos and icons: [`branding/BRAND.md`](branding/BRAND.md).
 
 ## What works today
 
@@ -32,6 +36,7 @@ River is for personal recordkeeping and education only. It never handles money, 
 
 - **Money is stored as integer cents.** Amounts are parsed from the typed digits, never by multiplying floats, so totals can't drift (`0.1 + 0.2` problems are impossible). Formatting to a currency happens only for display.
 - **Calculation logic is pure and separate from the UI.** `src/domain/analytics.ts` has no React or storage code, so every number on screen is unit-tested.
+- **One source for the brand.** The logo, icons and social card are generated from a single definition of the mark and palette (`branding/tools`), so every asset matches.
 - **Storage sits behind an interface.** `SessionRepository` is implemented with `localStorage` today. A cloud version (for example Supabase with row-level security, for accounts and multi-device sync) can replace it without touching any screen.
 - **Stored data is validated when it's read back**, so a corrupt record is skipped instead of crashing the app.
 - **CSV export guards against formula injection** in spreadsheet apps.
@@ -76,5 +81,5 @@ Then open http://localhost:5173.
 - [ ] Phase 6: Daily probability puzzle
 - [ ] Phase 7: Knowledge quizzes and achievements
 - [ ] Phase 8: Year in Review
-- [ ] Phase 9: Final branding (name, logo, icons)
+- [x] Phase 9: Final branding: Riverline name, Breakout Spade logo, icons, splash
 - [ ] Phase 10: Accounts and cloud sync, polish, deployment

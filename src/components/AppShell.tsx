@@ -56,7 +56,7 @@ export function AppShell() {
             </NavLink>
           ))}
         </nav>
-        <p className="mt-auto px-2 text-xs text-muted">For personal records and learning. River never handles money.</p>
+        <p className="mt-auto px-2 text-xs text-muted">For personal records and learning. Riverline never handles money.</p>
       </aside>
 
       <div className="min-w-0">

@@ -37,7 +37,7 @@ export function HomePage() {
     return (
       <div className="grid gap-6">
         <section className="felt-glow rounded-3xl border border-line p-6 md:p-10 grid gap-3">
-          <span className="text-xs font-semibold uppercase tracking-[0.14em] text-gold">Welcome to River</span>
+          <span className="text-xs font-semibold uppercase tracking-[0.14em] text-gold">Welcome to Riverline</span>
           <h1 className="font-display text-3xl md:text-5xl font-bold tracking-tight max-w-xl">Your poker sessions, on the record.</h1>
           <p className="text-muted max-w-lg">
             Record each session's result, see your lifetime net and trends, and learn Texas Hold'em along the way. Everything stays on this device.
@@ -80,7 +80,8 @@ export function HomePage() {
         </div>
       </motion.section>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+      {/* 8 tiles: 2 or 4 columns so rows always fill. */}
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatTile label="Total sessions" value={summary.count} sub={`${summary.positive} up · ${summary.negative} down · ${summary.even} even`} />
         <StatTile
           label="Positive sessions"

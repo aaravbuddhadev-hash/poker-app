@@ -1,1 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" rx="26" fill="#0E1211"/><rect x="28" y="16" width="64" height="88" rx="10" fill="none" stroke="#1FA971" stroke-width="7"/><polyline points="40,82 54,66 64,72 80,40" fill="none" stroke="#E8ECE9" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="80" cy="40" r="8" fill="#D4B062"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+<rect width="120" height="120" rx="26" fill="#0F1412"/>
+<g transform="translate(7 9) scale(0.8666666666666667)">
+  <defs>
+    <mask id="m12c" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120"><rect width="120" height="120" fill="#fff"/><polyline points="33,73 46,61 58,68 97,23" fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></mask>
+    <mask id="m12o" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120"><rect width="120" height="120" fill="#fff"/><path d="M60 14C44 34 22 44 22 64C22 80 40 86 52 76L48 100H72L68 76C80 86 98 80 98 64C98 44 76 34 60 14Z" fill="#000"/></mask>
+  </defs>
+  <path d="M60 14C44 34 22 44 22 64C22 80 40 86 52 76L48 100H72L68 76C80 86 98 80 98 64C98 44 76 34 60 14Z" fill="#1FA971" mask="url(#m12c)"/>
+  <polyline points="33,73 46,61 58,68 97,23" fill="none" stroke="#D4B062" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" mask="url(#m12o)"/>
+  <circle cx="97" cy="23" r="7.5" fill="#D4B062"/>
+</g>
+</svg>

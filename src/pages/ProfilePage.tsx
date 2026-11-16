@@ -80,7 +80,7 @@ export function ProfilePage() {
             <Button
               disabled={sessions.length === 0}
               onClick={() => {
-                download(`${isDemo ? 'river-demo-sessions' : 'river-sessions'}-${today}.csv`, sessionsToCsv(sessions))
+                download(`${isDemo ? 'riverline-demo-sessions' : 'riverline-sessions'}-${today}.csv`, sessionsToCsv(sessions))
                 toast(`Exported ${sessions.length} sessions`)
               }}
             >
@@ -119,7 +119,7 @@ export function ProfilePage() {
 
       <Card title="Account">
         <p className="text-sm text-muted max-w-prose">
-          Your sessions are saved in this browser on this device, and nothing is sent anywhere. Sign-in and cloud sync, so you can use River on several
+          Your sessions are saved in this browser on this device, and nothing is sent anywhere. Sign-in and cloud sync, so you can use Riverline on several
           devices, are the next backend step.
         </p>
       </Card>

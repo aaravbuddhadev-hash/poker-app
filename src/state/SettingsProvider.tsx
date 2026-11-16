@@ -42,7 +42,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     document.documentElement.dataset.theme = settings.theme
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', settings.theme === 'dark' ? '#0E1211' : '#F5F3EE')
+      ?.setAttribute('content', settings.theme === 'dark' ? '#0F1412' : '#F6F2E8')
     try {
       getBrowserStore().setItem(SETTINGS_KEY, JSON.stringify(settings))
     } catch {

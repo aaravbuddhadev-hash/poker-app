@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+<g transform="translate(0 0) scale(1)">
+  <defs>
+    <mask id="m4c" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120"><rect width="120" height="120" fill="#fff"/><polyline points="33,73 46,61 58,68 97,23" fill="none" stroke="#000" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></mask>
+    <mask id="m4o" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120"><rect width="120" height="120" fill="#fff"/><path d="M60 14C44 34 22 44 22 64C22 80 40 86 52 76L48 100H72L68 76C80 86 98 80 98 64C98 44 76 34 60 14Z" fill="#000"/></mask>
+  </defs>
+  <path d="M60 14C44 34 22 44 22 64C22 80 40 86 52 76L48 100H72L68 76C80 86 98 80 98 64C98 44 76 34 60 14Z" fill="#000000" mask="url(#m4c)"/>
+  <polyline points="33,73 46,61 58,68 97,23" fill="none" stroke="#000000" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" mask="url(#m4o)"/>
+  <circle cx="97" cy="23" r="7.5" fill="#000000"/>
+</g>
+</svg>
