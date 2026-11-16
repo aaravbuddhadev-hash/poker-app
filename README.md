@@ -4,6 +4,8 @@
 
 # Riverline · Poker Companion
 
+**Live app: [aaravbuddhadev-hash.github.io/poker-app](https://aaravbuddhadev-hash.github.io/poker-app/)**. It runs in any browser, with nothing to install. Your data stays on your own device. Tap "Explore with demo data" to look around first.
+
 A poker companion web app for **recording your own session results** and **learning Texas Hold'em**. Track your lifetime net, see your trends in charts, and (coming soon) practice probability with a daily puzzle on a virtual poker table.
 
 Riverline is for personal recordkeeping and education only. It never handles money, wagers or payments.
@@ -112,4 +114,4 @@ Then open http://localhost:5173.
 - [x] Phase 7: Knowledge quizzes and achievements
 - [x] Phase 8: Year in Review
 - [x] Phase 9: Final branding: Riverline name, Breakout Spade logo, icons, splash
-- [ ] Phase 10: Accounts and cloud sync, polish, deployment
+- [ ] Phase 10: ~~Deployment (GitHub Pages)~~ ✓, accounts and cloud sync, polish
