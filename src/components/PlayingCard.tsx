@@ -41,6 +41,7 @@ export function PlayingCard({ card, size = 'md', faceDown, highlight, dim, flip 
       <div
         className={cx(base, 'grid place-items-center border border-white/15 shadow-md shadow-black/40')}
         style={{ background: 'repeating-linear-gradient(45deg, #123d2d 0 6px, #0f3326 6px 12px)' }}
+        role="img"
         aria-label="Face-down card"
       >
         <div className="grid size-3/5 place-items-center rounded-md border border-[#d4b062]/40">

@@ -1,27 +1,62 @@
 import { HashRouter, Navigate, Route, Routes } from 'react-router'
 import { AppShell } from './components/AppShell'
-import { DailyPuzzlePage } from './pages/DailyPuzzlePage'
 import { HomePage } from './pages/HomePage'
-import { GlossaryPage } from './pages/learn/GlossaryPage'
-import { HandRankingsPage } from './pages/learn/HandRankingsPage'
-import { LessonPage } from './pages/learn/LessonPage'
-import { QuizHubPage } from './pages/learn/QuizHubPage'
-import { QuizPlayPage } from './pages/learn/QuizPlayPage'
-import { RulesGuidePage } from './pages/learn/RulesGuidePage'
 import { LearningProvider } from './state/LearningProvider'
 import { ProgressProvider } from './state/ProgressProvider'
-import { LearnPage } from './pages/learn/LearnPage'
-import { OddsCalculatorPage } from './pages/learn/OddsCalculatorPage'
-import { ProfilePage } from './pages/ProfilePage'
-import { SessionsPage } from './pages/SessionsPage'
-import { YearInReviewPage } from './pages/YearInReviewPage'
 import { SessionFormProvider } from './state/SessionFormProvider'
 import { SessionsProvider } from './state/SessionsProvider'
 import { SettingsProvider } from './state/SettingsProvider'
 import { ToastProvider } from './state/ToastProvider'
 import { AuthProvider, useAuth } from './state/AuthProvider'
-import type { ReactNode } from 'react'
+import { lazy, Suspense, useEffect, type ReactNode } from 'react'
+import { PageLoading } from './components/ui'
 import { NewPasswordDialog } from './components/account/NewPasswordDialog'
+
+/**
+ * Each screen is its own download, fetched the first time it's opened, so the
+ * first visit only loads the shell and the home screen. Once the app is idle,
+ * the rest are fetched in the background so later navigation is instant.
+ */
+const pageLoaders = {
+  DailyPuzzlePage: () => import('./pages/DailyPuzzlePage').then((m) => ({ default: m.DailyPuzzlePage })),
+  GlossaryPage: () => import('./pages/learn/GlossaryPage').then((m) => ({ default: m.GlossaryPage })),
+  HandRankingsPage: () => import('./pages/learn/HandRankingsPage').then((m) => ({ default: m.HandRankingsPage })),
+  LessonPage: () => import('./pages/learn/LessonPage').then((m) => ({ default: m.LessonPage })),
+  QuizHubPage: () => import('./pages/learn/QuizHubPage').then((m) => ({ default: m.QuizHubPage })),
+  QuizPlayPage: () => import('./pages/learn/QuizPlayPage').then((m) => ({ default: m.QuizPlayPage })),
+  RulesGuidePage: () => import('./pages/learn/RulesGuidePage').then((m) => ({ default: m.RulesGuidePage })),
+  LearnPage: () => import('./pages/learn/LearnPage').then((m) => ({ default: m.LearnPage })),
+  OddsCalculatorPage: () => import('./pages/learn/OddsCalculatorPage').then((m) => ({ default: m.OddsCalculatorPage })),
+  ProfilePage: () => import('./pages/ProfilePage').then((m) => ({ default: m.ProfilePage })),
+  SessionsPage: () => import('./pages/SessionsPage').then((m) => ({ default: m.SessionsPage })),
+  YearInReviewPage: () => import('./pages/YearInReviewPage').then((m) => ({ default: m.YearInReviewPage })),
+}
+const page = (name: keyof typeof pageLoaders) => lazy(pageLoaders[name])
+const DailyPuzzlePage = page('DailyPuzzlePage')
+const GlossaryPage = page('GlossaryPage')
+const HandRankingsPage = page('HandRankingsPage')
+const LessonPage = page('LessonPage')
+const QuizHubPage = page('QuizHubPage')
+const QuizPlayPage = page('QuizPlayPage')
+const RulesGuidePage = page('RulesGuidePage')
+const LearnPage = page('LearnPage')
+const OddsCalculatorPage = page('OddsCalculatorPage')
+const ProfilePage = page('ProfilePage')
+const SessionsPage = page('SessionsPage')
+const YearInReviewPage = page('YearInReviewPage')
+
+function usePrefetchPages() {
+  useEffect(() => {
+    const prefetch = () => Object.values(pageLoaders).forEach((load) => void load().catch(() => {}))
+    // Safari has no requestIdleCallback; a short delay does the same job there.
+    if (typeof window.requestIdleCallback === 'function') {
+      const id = window.requestIdleCallback(prefetch, { timeout: 4000 })
+      return () => window.cancelIdleCallback(id)
+    }
+    const t = setTimeout(prefetch, 2000)
+    return () => clearTimeout(t)
+  }, [])
+}
 
 /** Learning progress belongs to whoever is signed in: start fresh from their own data when that changes. */
 function AccountScope({ children }: { children: ReactNode }) {
@@ -37,6 +72,7 @@ function AccountScope({ children }: { children: ReactNode }) {
 }
 
 export default function App() {
+  usePrefetchPages()
   return (
     <SettingsProvider>
       <ToastProvider>
@@ -48,7 +84,14 @@ export default function App() {
             <HashRouter>
               <Routes>
                 {/* Full-screen story, outside the app shell's navigation. */}
-                <Route path="recap/:year" element={<YearInReviewPage />} />
+                <Route
+                  path="recap/:year"
+                  element={
+                    <Suspense fallback={<PageLoading fullScreen />}>
+                      <YearInReviewPage />
+                    </Suspense>
+                  }
+                />
                 <Route element={<AppShell />}>
                   <Route index element={<HomePage />} />
                   <Route path="sessions" element={<SessionsPage />} />

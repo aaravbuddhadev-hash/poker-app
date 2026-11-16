@@ -8,6 +8,7 @@ import { bestHand, explainComparison } from '../poker/evaluator'
 import { KIND_LABEL, msUntilNextPuzzle, puzzleForDate, utcDateKey } from '../puzzle/daily'
 import { explainPuzzle } from '../puzzle/explain'
 import { accuracy, evenSplit, puzzleStats, rebalance, type Submission } from '../puzzle/scoring'
+import { useAuth } from '../state/AuthProvider'
 import { useEquity } from '../state/useEquity'
 import { usePuzzleHistory } from '../state/usePuzzleHistory'
 
@@ -33,6 +34,7 @@ function formatCountdown(ms: number) {
 }
 
 export function DailyPuzzlePage() {
+  const { user } = useAuth()
   const { today, msLeft } = useUtcToday()
   const puzzle = useMemo(() => puzzleForDate(today), [today])
   const { submissions, save } = usePuzzleHistory()
@@ -155,7 +157,7 @@ export function DailyPuzzlePage() {
                   max={100}
                   value={prediction[i]}
                   onChange={(e) => setPrediction((p) => rebalance(p, i, Number(e.target.value)))}
-                  className="w-full"
+                  className="h-8 w-full cursor-pointer"
                   style={{ accentColor: PLAYER_COLORS[i] }}
                 />
               </div>
@@ -164,7 +166,7 @@ export function DailyPuzzlePage() {
             <Button variant="primary" className="justify-self-start" disabled={!result} onClick={submit}>
               {result ? 'Lock in prediction' : 'Preparing the exact answer…'}
             </Button>
-            <p className="text-xs text-muted">One answer per day, saved on this device.</p>
+            <p className="text-xs text-muted">One answer per day{user ? ', saved to your account.' : ', saved on this device.'}</p>
           </div>
         </Card>
       ) : (

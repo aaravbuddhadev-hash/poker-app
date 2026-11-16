@@ -139,10 +139,10 @@ export function OddsCalculatorPage() {
               ))}
             </div>
             <div className="flex flex-wrap justify-center gap-2">
-              <button type="button" onClick={dealNext} disabled={boardCards.length === 5} className="rounded-full bg-black/25 px-3.5 py-1.5 text-xs font-semibold hover:bg-black/35 disabled:opacity-40">
+              <button type="button" onClick={dealNext} disabled={boardCards.length === 5} className="inline-flex min-h-9 items-center rounded-full bg-black/25 px-4 text-xs font-semibold hover:bg-black/35 disabled:opacity-40">
                 Deal {boardCards.length < 3 ? 'flop' : boardCards.length === 3 ? 'turn' : 'river'}
               </button>
-              <button type="button" onClick={() => { setBoard([null, null, null, null, null]); setActive({ kind: 'board', i: 0 }) }} disabled={boardCards.length === 0} className="rounded-full bg-black/25 px-3.5 py-1.5 text-xs font-semibold hover:bg-black/35 disabled:opacity-40">
+              <button type="button" onClick={() => { setBoard([null, null, null, null, null]); setActive({ kind: 'board', i: 0 }) }} disabled={boardCards.length === 0} className="inline-flex min-h-9 items-center rounded-full bg-black/25 px-4 text-xs font-semibold hover:bg-black/35 disabled:opacity-40">
                 Clear board
               </button>
             </div>
@@ -206,7 +206,7 @@ export function OddsCalculatorPage() {
           </div>
 
           {hands.length < MAX_PLAYERS && (
-            <button type="button" onClick={addPlayer} className="justify-self-center rounded-full border border-dashed border-[#ede7d6]/40 px-4 py-1.5 text-xs font-semibold hover:border-[#ede7d6]/80">
+            <button type="button" onClick={addPlayer} className="inline-flex min-h-9 items-center justify-self-center rounded-full border border-dashed border-[#ede7d6]/40 px-4 text-xs font-semibold hover:border-[#ede7d6]/80">
               + Add player
             </button>
           )}
@@ -294,11 +294,13 @@ function SlotButton({
     <button
       type="button"
       onClick={onClick}
-      aria-label={card === null ? `${label}: empty` : `${label}: ${cardName(card)}`}
       aria-pressed={active}
       className={cx('rounded-lg transition-transform', active && 'ring-2 ring-[#d4b062] ring-offset-2 ring-offset-[#155238]')}
     >
-      <PlayingCard card={card} size={size} highlight={highlight} dim={dim} />
+      <span aria-hidden>
+        <PlayingCard card={card} size={size} highlight={highlight} dim={dim} />
+      </span>
+      <span className="sr-only">{card === null ? `${label}: empty` : `${label}: ${cardName(card)}`}</span>
     </button>
   )
 }

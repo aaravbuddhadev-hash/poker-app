@@ -164,3 +164,24 @@ export function EmptyState({ title, body, children }: { title: string; body: str
     </div>
   )
 }
+
+/** Placeholder while a screen's code downloads: the shape of a page, gently pulsing. */
+export function PageLoading({ fullScreen }: { fullScreen?: boolean }) {
+  return (
+    <div role="status" aria-label="Loading" className={cx('grid gap-4', fullScreen && 'min-h-dvh place-content-center bg-bg p-6')}>
+      {fullScreen ? (
+        <div className="size-10 animate-spin rounded-full border-2 border-line border-t-emerald" />
+      ) : (
+        <>
+          <div className="h-9 w-48 animate-pulse rounded-xl bg-surface" />
+          <div className="h-40 animate-pulse rounded-3xl bg-surface" />
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="h-20 animate-pulse rounded-2xl bg-surface" />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}

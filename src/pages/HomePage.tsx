@@ -1,7 +1,6 @@
 import { motion } from 'motion/react'
-import { useMemo, useState } from 'react'
+import { lazy, Suspense, useMemo, useState } from 'react'
 import { Link } from 'react-router'
-import { CumulativeChart } from '../components/charts'
 import { DailyPuzzlePreview } from '../components/DailyPuzzlePreview'
 import { PlusIcon } from '../components/icons'
 import { SessionCard } from '../components/SessionCard'
@@ -11,6 +10,7 @@ import { inRange, outcomeOf, RANGE_LABELS, sortSessions, summarize, type RangeKe
 import { formatDate, formatDuration } from '../lib/dates'
 import { formatMoney } from '../lib/money'
 import { useSessionForm } from '../state/SessionFormProvider'
+import { useAuth } from '../state/AuthProvider'
 import { useSessions } from '../state/SessionsProvider'
 import { useSettings } from '../state/SettingsProvider'
 
@@ -19,7 +19,11 @@ const RANGES = (Object.keys(RANGE_LABELS) as RangeKey[]).map((value) => ({
   label: value === 'ytd' ? 'Year' : value === 'all' ? 'All' : value.toUpperCase(),
 }))
 
+// The chart library is large; load it separately so the rest of Home shows first.
+const CumulativeChart = lazy(() => import('../components/charts').then((m) => ({ default: m.CumulativeChart })))
+
 export function HomePage() {
+  const { user } = useAuth()
   const { sessions, loading, today } = useSessions()
   const { openNew, openEdit } = useSessionForm()
   const { settings, update } = useSettings()
@@ -41,7 +45,7 @@ export function HomePage() {
           <span className="text-xs font-semibold uppercase tracking-[0.14em] text-gold">Welcome to Riverline</span>
           <h1 className="font-display text-3xl md:text-5xl font-bold tracking-tight max-w-xl">Your poker sessions, on the record.</h1>
           <p className="text-muted max-w-lg">
-            Record each session's result, see your lifetime net and trends, and learn Texas Hold'em along the way. Everything stays on this device.
+            Record each session's result, see your lifetime net and trends, and learn Texas Hold'em along the way. {user ? 'Saved to your account and synced across your devices.' : 'Everything stays on this device unless you sign in.'}
           </p>
         </section>
         <EmptyState title="No sessions yet" body="Add your first session to start your lifetime results, or look around with fictional demo data first.">
@@ -58,6 +62,7 @@ export function HomePage() {
 
   return (
     <div className="grid gap-5 md:gap-6">
+      <h1 className="sr-only">Home</h1>
       <motion.section
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
@@ -124,7 +129,9 @@ export function HomePage() {
           <Segmented label="Chart range" options={RANGES} value={range} onChange={setRange} />
         </div>
         {ranged.length ? (
-          <CumulativeChart sessions={ranged} />
+          <Suspense fallback={<div className="h-[220px] animate-pulse rounded-xl bg-surface-2/60" role="status" aria-label="Loading chart" />}>
+            <CumulativeChart sessions={ranged} />
+          </Suspense>
         ) : (
           <p className="grid h-[220px] place-items-center text-sm text-muted">No sessions in this period.</p>
         )}

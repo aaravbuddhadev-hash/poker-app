@@ -75,7 +75,7 @@ export function GlossaryPage() {
         </p>
       )}
 
-      <dl className="grid gap-3">
+      <div className="grid gap-3">
         {sorted.map((g, i) => {
           const letter = letterOf(g.term)
           const firstOfLetter = !query && (i === 0 || letterOf(sorted[i - 1].term) !== letter)
@@ -86,15 +86,18 @@ export function GlossaryPage() {
                   {letter}
                 </h2>
               )}
-              <div
+              <article
                 id={`term-${g.id}`}
+                aria-labelledby={`term-${g.id}-name`}
                 className={cx('scroll-mt-40 rounded-2xl border bg-surface p-4 transition-colors', focus === g.id ? 'border-gold ring-2 ring-gold/40' : 'border-line')}
               >
-                <dt className="flex flex-wrap items-baseline gap-x-2">
-                  <span className="font-display text-lg font-bold">{g.term}</span>
+                <div className="flex flex-wrap items-baseline gap-x-2">
+                  <h3 id={`term-${g.id}-name`} className="font-display text-lg font-bold">
+                    {g.term}
+                  </h3>
                   {g.aliases && <span className="text-xs text-muted">also: {g.aliases.join(', ')}</span>}
-                </dt>
-                <dd className="mt-1 grid gap-2">
+                </div>
+                <div className="mt-1 grid gap-2">
                   <p className="text-sm">{g.definition}</p>
                   {g.example && <p className="text-sm text-muted">Example: {g.example}</p>}
                   {g.related.length > 0 && (
@@ -105,19 +108,19 @@ export function GlossaryPage() {
                           key={r}
                           type="button"
                           onClick={() => goTo(r)}
-                          className="rounded-full border border-line bg-surface-2 px-2.5 py-0.5 text-xs font-semibold hover:border-emerald/60 hover:text-emerald"
+                          className="inline-flex min-h-8 items-center rounded-full border border-line bg-surface-2 px-3 text-xs font-semibold hover:border-emerald/60 hover:text-emerald"
                         >
                           {byId.get(r)?.term}
                         </button>
                       ))}
                     </div>
                   )}
-                </dd>
-              </div>
+                </div>
+              </article>
             </div>
           )
         })}
-      </dl>
+      </div>
     </div>
   )
 }

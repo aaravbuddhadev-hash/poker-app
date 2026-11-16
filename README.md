@@ -72,6 +72,10 @@ Brand guide, logos and icons: [`branding/BRAND.md`](branding/BRAND.md).
 - **Offline-first sync with last-writer-wins.** Signed-in data is saved on the device first, with a list of changes still to upload. Deletes are kept as tombstones so other devices learn about them. The database refuses to let an older edit overwrite a newer one, so it doesn't matter which device uploads first. Learning progress merges per item (the latest change per lesson, every quiz attempt, the first answer to each daily puzzle), and the tests check the merge gives the same result in either order.
 - **Security lives in the database.** Every table uses Postgres row-level security, so the browser's public key can only reach the signed-in user's own rows. The schema is in [`supabase/migrations`](supabase/migrations).
 - **Guests download nothing extra.** The Supabase client is loaded only when someone signs in.
+- **Screens load on demand.** Each screen, and the chart library, is a separate download fetched when first needed (then prefetched in the background), which halved the first download.
+- **Accessibility is checked, not assumed.** Every screen passes an automated axe audit in both themes, controls meet touch-target sizes on phones, and cards have text alternatives for screen readers.
+- **Screens load on demand.** Each screen, and the chart library, is a separate download fetched when first needed (then prefetched in the background), which halved the first download.
+- **Accessibility is checked, not assumed.** Every screen passes an automated axe audit in both themes, controls meet touch-target sizes on phones, and cards and charts have text alternatives for screen readers.
 - **Stored data is validated when it's read back**, so a corrupt record is skipped instead of crashing the app.
 - **CSV export guards against formula injection** in spreadsheet apps.
 
@@ -121,6 +125,8 @@ The app runs fine without a backend: everything stays on the device. To switch o
 | `npm test` | Run the unit tests |
 | `npm run build` | Type-check and build for production |
 | `npm run lint` | Lint with oxlint |
+| `npm run deploy` | Test, build and publish to GitHub Pages |
+| `npm run deploy` | Test, build and publish to GitHub Pages |
 
 ## Roadmap
 

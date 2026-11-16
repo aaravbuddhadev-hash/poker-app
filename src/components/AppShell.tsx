@@ -1,11 +1,11 @@
 import { NavLink, Outlet, useLocation } from 'react-router'
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { useSessions } from '../state/SessionsProvider'
 import { useSessionForm } from '../state/SessionFormProvider'
 import { useSettings } from '../state/SettingsProvider'
 import { HomeIcon, LearnIcon, PlusIcon, ProfileIcon, PuzzleIcon, SessionsIcon } from './icons'
 import { Logo } from './Logo'
-import { cx } from './ui'
+import { cx, PageLoading } from './ui'
 
 const NAV = [
   { to: '/', label: 'Home', icon: HomeIcon, end: true },
@@ -72,12 +72,15 @@ export function AppShell() {
         )}
 
         {/* Mobile top bar */}
-        <div className="flex items-center justify-between px-4 pt-[calc(1rem+env(safe-area-inset-top))] md:hidden">
+        <header className="flex items-center justify-between px-4 pt-[calc(1rem+env(safe-area-inset-top))] md:hidden">
           <Logo size={26} />
-        </div>
+        </header>
 
         <main className="mx-auto w-full max-w-5xl px-4 pb-32 pt-4 md:px-8 md:pb-12 md:pt-8">
-          <Outlet />
+          {/* Screens load on first visit; show a placeholder meanwhile. */}
+          <Suspense fallback={<PageLoading />}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
 
