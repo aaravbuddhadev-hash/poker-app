@@ -15,6 +15,15 @@ const PATHS: Record<AchievementIcon, string> = {
   target: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0-4a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0-4a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z',
 }
 
+/** The line icon for an achievement. */
+export function AchievementGlyph({ icon, size = 22 }: { icon: AchievementIcon; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d={PATHS[icon]} />
+    </svg>
+  )
+}
+
 export function AchievementBadge({ a }: { a: AchievementStatus }) {
   return (
     <div
@@ -30,9 +39,7 @@ export function AchievementBadge({ a }: { a: AchievementStatus }) {
           a.unlocked ? 'bg-[radial-gradient(circle_at_30%_30%,#f0d58f,#b08a3e)] text-[#0f1412] shadow-md shadow-[#d4b062]/30' : 'bg-surface-2 text-muted',
         )}
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-          <path d={PATHS[a.icon]} />
-        </svg>
+        <AchievementGlyph icon={a.icon} />
       </motion.span>
       <span className={cx('text-sm font-semibold', !a.unlocked && 'text-muted')}>{a.name}</span>
       <span className="text-xs text-muted">{a.description}</span>

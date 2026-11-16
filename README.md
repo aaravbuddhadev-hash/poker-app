@@ -32,8 +32,8 @@ Brand guide, logos and icons: [`branding/BRAND.md`](branding/BRAND.md).
   - Question styles: multiple choice, dealt showdowns on the table, picking the strongest hand or the winning river card, and number answers.
   - Hand questions are dealt fresh each time; the evaluator and equity engine compute every answer and explanation, and tests re-check 126 generated quizzes.
   - Missed questions go to a review list until you answer them correctly.
-- **Achievements**: ten learning badges (lessons, quizzes, puzzles, streaks), shown on Profile with progress bars and an unlock pop-up. None are tied to session results or money.
-- **Poker table**: a reusable oval table with 2–6 seats, a dealer button, a dealing animation, and winning-hand highlights.
+- **Achievements**: ten learning badges (lessons, quizzes, puzzles, streaks), shown on Profile with progress bars. Unlocking one plays a short celebration: the medal turns gold with a burst of sparks. None are tied to session results or money.
+- **Poker table**: a reusable oval table with 2–6 seats, a dealer button, a dealing animation, and winning-hand highlights. Cards are two-sided and turn over in 3D when revealed (the flop turns one card at a time). Every animation respects the system's reduced-motion setting.
 - **Rules guide**: nine short lessons, from the deck to showdown, kickers and outs. Mark lessons complete; progress is saved and shown on Learn and Profile. Interactive examples include a deal you can step through street by street, a six-seat table that shows how the button and blinds move, showdowns you reveal, and an outs calculator.
 - **Glossary**: 53 terms with examples and cross-linked related terms. Search covers names, aliases ("UTG", "OESD") and definitions, and lessons link straight to each entry.
 - **Hand rankings**: all ten hands with real card examples, tie-break rules and how often each occurs.

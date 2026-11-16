@@ -81,7 +81,8 @@ export function PokerTable({ seats, board, highlight, dimOthers, dealerSeat, dea
         {label && <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#d4b062]">{label}</span>}
         <div key={`board-${dealKey}`} className="flex gap-1 sm:gap-1.5">
           {board.map((c, i) => (
-            <motion.div key={`${i}-${c ?? 'x'}`} {...deal(holeCount + i)}>
+            // Keyed by position: when a card is dealt here it turns over in place.
+            <motion.div key={i} {...deal(holeCount + i)}>
               <PlayingCard card={c ?? 0} faceDown={c === null} size="sm" highlight={isHi(c)} dim={isDim(c)} className="sm:w-12" />
             </motion.div>
           ))}

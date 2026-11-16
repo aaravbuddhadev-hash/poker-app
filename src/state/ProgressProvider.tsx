@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { computeAchievements, type AchievementStatus } from '../achievements/achievements'
+import { AchievementCelebration } from '../components/AchievementCelebration'
 import {
   GUEST_KEYS,
   loadPuzzles,
@@ -18,7 +19,6 @@ import { quizStats, type QuizAttempt, type QuizStats } from '../quiz/stats'
 import type { Question } from '../quiz/types'
 import { useStorageKeys } from './AuthProvider'
 import { useLearning } from './LearningProvider'
-import { useToast } from './ToastProvider'
 
 /**
  * Shared progress for puzzles and quizzes, so every screen (and the
@@ -116,7 +116,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
 
 /** Announces newly unlocked achievements once each. Existing unlocks are recorded silently on first run. */
 function AchievementWatcher({ achievements, storageKey }: { achievements: AchievementStatus[]; storageKey: string }) {
-  const toast = useToast()
+  const [queue, setQueue] = useState<AchievementStatus[]>([])
 
   useEffect(() => {
     const store = getBrowserStore()
@@ -131,11 +131,12 @@ function AchievementWatcher({ achievements, storageKey }: { achievements: Achiev
     const seen = new Set(stored)
     const fresh = unlocked.filter((a) => !seen.has(a.id))
     if (!fresh.length) return
-    fresh.forEach((a) => toast(`Achievement unlocked: ${a.name}`))
+    setQueue((q) => [...q, ...fresh.filter((a) => !q.some((x) => x.id === a.id))])
     writeLocalChange(store, storageKey, { seen: [...seen, ...fresh.map((a) => a.id)] })
-  }, [achievements, toast, storageKey])
+  }, [achievements, storageKey])
 
-  return null
+  const next = useCallback(() => setQueue((q) => q.slice(1)), [])
+  return <AchievementCelebration queue={queue} onDone={next} />
 }
 
 export function useProgress() {

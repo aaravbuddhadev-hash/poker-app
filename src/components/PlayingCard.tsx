@@ -23,11 +23,19 @@ interface Props {
   dim?: boolean
   /** Flip the card in when it first appears. */
   flip?: boolean
+  /** Seconds to wait before turning over, to stagger several cards like a dealer would. */
+  flipDelay?: number
   className?: string
 }
 
-/** A realistic playing card. The one card renderer used across the app. */
-export function PlayingCard({ card, size = 'md', faceDown, highlight, dim, flip = true, className }: Props) {
+/**
+ * A realistic playing card, and the one card renderer used across the app.
+ *
+ * The card has two real sides, front and back, on one element that turns in
+ * 3D. Changing `faceDown` turns it over where it sits; with `flip`, a card
+ * that appears face up starts on its back and turns over as it arrives.
+ */
+export function PlayingCard({ card, size = 'md', faceDown, highlight, dim, flip = true, flipDelay = 0, className }: Props) {
   const reduce = useReducedMotion()
   const s = SIZE[size]
   const base = cx('relative aspect-[5/7] shrink-0 select-none', s.w, s.radius, className)
@@ -36,37 +44,57 @@ export function PlayingCard({ card, size = 'md', faceDown, highlight, dim, flip 
     return <div className={cx(base, 'border-2 border-dashed border-white/25 bg-black/10')} aria-hidden />
   }
 
-  if (faceDown) {
-    return (
-      <div
-        className={cx(base, 'grid place-items-center border border-white/15 shadow-md shadow-black/40')}
-        style={{ background: 'repeating-linear-gradient(45deg, #123d2d 0 6px, #0f3326 6px 12px)' }}
-        role="img"
-        aria-label="Face-down card"
+  const showBack = !!faceDown
+  return (
+    <motion.div
+      role="img"
+      aria-label={showBack ? 'Face-down card' : cardName(card)}
+      animate={{ opacity: dim ? 0.38 : 1, y: highlight ? -6 : 0 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 26 }}
+      className={cx(base, '[perspective:800px]')}
+    >
+      <motion.div
+        // Start on the back and turn over, unless motion is reduced.
+        initial={flip && !showBack && !reduce ? { rotateY: 180 } : false}
+        animate={{ rotateY: showBack ? 180 : 0 }}
+        transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 170, damping: 20, mass: 0.9, delay: flipDelay }}
+        className="absolute inset-0 [transform-style:preserve-3d]"
       >
-        <div className="grid size-3/5 place-items-center rounded-md border border-[#d4b062]/40">
-          <LogoMark size={20} />
-        </div>
-      </div>
-    )
-  }
+        <CardFront card={card} size={size} highlight={highlight} />
+        <CardBack radius={s.radius} />
+      </motion.div>
+    </motion.div>
+  )
+}
 
+const FACE = 'absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden]'
+
+function CardBack({ radius }: { radius: string }) {
+  return (
+    <div
+      aria-hidden
+      className={cx(FACE, radius, 'grid place-items-center border border-white/15 shadow-md shadow-black/40 [transform:rotateY(180deg)]')}
+      style={{ background: 'repeating-linear-gradient(45deg, #123d2d 0 6px, #0f3326 6px 12px)' }}
+    >
+      <div className="grid size-3/5 place-items-center rounded-md border border-[#d4b062]/40">
+        <LogoMark size={20} />
+      </div>
+    </div>
+  )
+}
+
+function CardFront({ card, size, highlight }: { card: Card; size: CardSize; highlight?: boolean }) {
+  const s = SIZE[size]
   const red = isRed(card)
   const rank = rankLabel(card)
   const suit = SUIT_SYMBOLS[suitOf(card)]
   const face = rankOf(card) >= 9 && rankOf(card) <= 11 // J, Q, K
-
   return (
-    <motion.div
-      key={card}
-      initial={flip && !reduce ? { rotateY: 90, opacity: 0.4 } : false}
-      animate={{ rotateY: 0, opacity: dim ? 0.38 : 1, y: highlight ? -6 : 0 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 26 }}
-      style={{ transformPerspective: 700 }}
-      role="img"
-      aria-label={cardName(card)}
+    <div
+      aria-hidden
       className={cx(
-        base,
+        FACE,
+        s.radius,
         'bg-[#fffdf8] shadow-md shadow-black/40 ring-1 ring-black/10',
         red ? 'text-[#c0262d]' : 'text-[#18201c]',
         highlight && 'ring-2 ring-[#d4b062] shadow-lg shadow-[#d4b062]/25',
@@ -90,6 +118,6 @@ export function PlayingCard({ card, size = 'md', faceDown, highlight, dim, flip 
           <span className={cx('leading-none', s.pip)}>{suit}</span>
         )}
       </span>
-    </motion.div>
+    </div>
   )
 }

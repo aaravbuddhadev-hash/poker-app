@@ -28,7 +28,8 @@ export function StreetStepper({ hole, board, caption }: { hole: string; board: s
         <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#d4b062]">Board</span>
         <div className="flex gap-1.5">
           {boardCards.map((c, i) => (
-            <PlayingCard key={c} card={c} size="sm" faceDown={i >= shown} highlight={inBest.has(c)} />
+            // The flop's three cards turn over one after another.
+            <PlayingCard key={c} card={c} size="sm" faceDown={i >= shown} highlight={inBest.has(c)} flipDelay={i < 3 ? i * 0.09 : 0} />
           ))}
         </div>
       </div>
